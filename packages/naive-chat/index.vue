@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import type { Contact } from 'packages'
-
-// import NcContact from '../'
+import { provide, ref } from 'vue'
+import type { Contact } from '../'
 
 const props = defineProps<{
   contacts: Contact[]
 }>()
-
+// import NcContact from '../'
+const emits = defineEmits<{
+  (e: 'changeContact', contact: Contact): void
+}>()
 defineOptions({
   name: 'NaiveChat',
 })
@@ -17,6 +19,10 @@ provide('active-message', activeMessage)
 provide('active-menu-key', activeMenuKey)
 
 provide('contacts', props.contacts)
+
+function changeContact(contact: Contact) {
+  emits('changeContact', contact)
+}
 </script>
 
 <template>
@@ -32,7 +38,7 @@ provide('contacts', props.contacts)
       border-r
       flex="~ col"
     >
-      <NcContact v-if="activeMenuKey === 'message'" />
+      <NcContact v-if="activeMenuKey === 'message'" @change-contact="changeContact" />
       <div v-else />
     </div>
 

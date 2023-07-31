@@ -12,6 +12,7 @@ export interface Contact {
 
 NcContact.install = (app: App) => {
   app.component(NcContact.name, NcContact)
+  return app
 }
 
 export default NcContact

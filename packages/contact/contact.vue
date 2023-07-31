@@ -2,15 +2,21 @@
 import { dateFormat } from '../_utils'
 import type { Contact } from '.'
 
+const emits = defineEmits<{
+  (e: 'changeContact', contact: Contact): void
+}>()
+
 defineOptions({
   name: 'NcContact',
 })
+
 const contacts = inject<Contact[]>('contacts')
 // const activeContact = ref<Contact | undefined>(undefined)
 const activeContact = inject<Ref<Contact>>('active-message')
 function onClickContact(contact: Contact) {
   // console.log(contact)
   activeContact!.value = contact
+  emits('changeContact', contact)
 }
 
 function getContactClass(contact: Contact) {

@@ -5,6 +5,9 @@ import { NcMessage } from './message'
 
 export {
   NaiveChat,
+  NcContact,
+  NcMessage,
+  NcMenu,
 }
 export default [
   NaiveChat,
