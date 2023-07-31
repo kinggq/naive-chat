@@ -39,16 +39,13 @@ export default defineConfig({
       imports: [
         'vue',
       ],
-      dts: true,
-      dirs: [],
-      vueTemplate: true,
     }),
 
     // https://github.com/antfu/vite-plugin-components
     Components({
       // extensions: ['vue'],
       // include: [/\.vue$/, /\.vue\?vue/],
-      dts: true,
+      // dts: true,
     }),
 
     // https://github.com/antfu/unocss

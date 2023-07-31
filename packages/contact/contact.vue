@@ -1,15 +1,24 @@
 <script setup lang="ts">
+import type { Contact } from '.'
+
 defineOptions({
   name: 'NcContact',
 })
+const contacts = inject<Contact[]>('contacts')
+// const activeContact = ref<Contact | undefined>(undefined)
+const activeContact = inject<Ref<Contact>>('active-message')
+function onClickContact(contact: Contact) {
+  // console.log(contact)
+  activeContact!.value = contact
+}
+
+function getContactClass(contact: Contact) {
+  return contact === activeContact?.value ? 'bg-gray-500/10' : 'gray-500/4 hover:gray-500/10'
+}
 </script>
 
 <template>
-  <div
-    h-full w-220px
-    border-r
-    flex="~ col"
-  >
+  <div>
     <div py-10px bg="gray/2">
       <input
         rounded-2px
@@ -21,8 +30,11 @@ defineOptions({
     </div>
     <div overflow-auto>
       <div
-        v-for="contact in 10" :key="contact"
-        bg="gray-500/4" p-10px
+        v-for="contact in contacts" :key="contact.id"
+        cursor-pointer
+        p-10px
+        :class="getContactClass(contact)"
+        @click="onClickContact(contact)"
       >
         <div
           flex="~ items-center"
@@ -34,14 +46,14 @@ defineOptions({
           >
           <div flex-1 truncate pl-10px text-left>
             <div text-14px font-400>
-              好友{{ contact }}
+              {{ contact.nickname }}
             </div>
             <div
               w-full
               truncate
               text="gray-500/80 12px"
             >
-              {{ contact % 2 === 0 ? '[语音]' : '下个月六号晚上七点半开会' }}
+              {{ contact.lastMessage }}
             </div>
           </div>
           <div

@@ -7,6 +7,6 @@ function install(app: App) {
   })
 }
 
-export default {
-  install,
-}
+export * from './contact'
+export * from './components'
+export default install

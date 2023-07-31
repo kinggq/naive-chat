@@ -1,12 +1,52 @@
 <script setup lang="ts">
+import type { Menu } from '.'
+
 defineOptions({
   name: 'NcMenu',
 })
+
+const menus = ref<Menu[]>([
+  {
+    key: 'message',
+    icon: 'i-ri:chat-3-line',
+    activeIcon: 'i-ri:chat-3-fill',
+    active: true,
+  },
+  {
+    key: 'contact',
+    icon: 'i-ri:contacts-line',
+    activeIcon: 'i-ri:contacts-fill',
+    active: false,
+  },
+  {
+    key: 'more',
+    icon: 'i-ri:more-line',
+    activeIcon: 'i-ri:more-fill',
+    active: false,
+  },
+])
+const activeMenuKey = inject<Ref<string>>('active-menu-key')
+
+activeMenuKey!.value = menus.value.filter(item => item.active)[0].key
+
+function onClickMenu(menu: Menu) {
+  menus.value.forEach((item) => {
+    item.active = false
+  })
+  menu.active = true
+  activeMenuKey!.value = menu.key
+}
+
+function getMenuClass(menu: Menu) {
+  if (menu.active)
+    return `${menu.activeIcon} text-green/80`
+  return `${menu.icon} text-gray/50`
+}
 </script>
 
 <template>
   <div
-    h-full w-60px
+    h-full min-w-60px
     border-r
     bg="gray-500/10"
     py-10px
@@ -25,9 +65,12 @@ defineOptions({
       w-full py-10px text-20px
       flex="~ col gap6 items-center"
     >
-      <div i-ri:chat-3-line />
-      <div i-ri:contacts-line />
-      <div i-ri:more-line />
+      <div
+        v-for="menu in menus"
+        :key="menu.key"
+        cursor-pointer :class="getMenuClass(menu)"
+        @click="onClickMenu(menu)"
+      />
     </div>
   </div>
 </template>
