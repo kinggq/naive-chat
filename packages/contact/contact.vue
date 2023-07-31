@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { dateFormat } from '../_utils'
 import type { Contact } from '.'
 
 defineOptions({
@@ -19,8 +20,9 @@ function getContactClass(contact: Contact) {
 
 <template>
   <div>
-    <div py-10px bg="gray/2">
+    <div px-10px py-10px bg="gray/2">
       <input
+        w-full
         rounded-2px
         px-10px py-2px text-14px
         bg="gray/10"
@@ -61,7 +63,7 @@ function getContactClass(contact: Contact) {
             flex="~ col items-center"
             text="12px gray-500/50"
           >
-            <div>13:10</div>
+            <div>{{ dateFormat(contact.lastTime) }}</div>
             <div i-ri:notification-off-line />
           </div>
         </div>
