@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { provide, ref } from 'vue'
 import type { Contact } from '../'
+import { NcContact, NcMenu, NcMessage } from '../'
 
 const props = defineProps<{
   contacts: Contact[]
@@ -32,7 +33,7 @@ function changeContact(contact: Contact) {
     border rounded-4px
     flex="~"
   >
-    <nc-menu />
+    <NcMenu />
     <div
       h-full w-220px
       border-r
@@ -42,6 +43,6 @@ function changeContact(contact: Contact) {
       <div v-else />
     </div>
 
-    <nc-message />
+    <NcMessage />
   </div>
 </template>
