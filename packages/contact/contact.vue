@@ -12,7 +12,7 @@ defineOptions({
 
 const contacts = inject<Contact[]>('contacts')
 // const activeContact = ref<Contact | undefined>(undefined)
-const activeContact = inject<Ref<Contact>>('active-message')
+const activeContact = inject<Ref<Contact>>('current-contact')
 function onClickContact(contact: Contact) {
   // console.log(contact)
   activeContact!.value = contact
