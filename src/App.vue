@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Contact } from '../packages'
-
 import { NaiveChat } from '../packages'
 
 const contacts = ref<Contact[]>([])
@@ -15,7 +14,7 @@ for (let i = 0; i < 10; i++) {
     lastTime: Date.now(),
   })
 }
-
+// console.log('1')
 function changeContact(contact: Contact) {
   // console.log('组件', contact)
 }

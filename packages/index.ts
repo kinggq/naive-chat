@@ -1,17 +1,16 @@
 import '@unocss/reset/tailwind.css'
 import 'uno.css'
-import type { App } from 'vue'
+import type { App, Plugin } from 'vue'
+import plugins from './components'
 
-import components from './components'
-
-export * from './components'
-function install(app: App) {
-  components.forEach((component) => {
-    // app.config.globalProperties[component.name] = component
-    // app.provide(component.name, component)
-    app.component(component.name, component)
-  })
+const NaiveChatP: Plugin = {
+  install(app: App) {
+    plugins.forEach((plugin) => {
+      plugin.install?.(app)
+    })
+  },
 }
 
-export * from './contact'
-export default install
+export * from './types'
+export * from './components'
+export default NaiveChatP

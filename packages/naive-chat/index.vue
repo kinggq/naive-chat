@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { provide, ref } from 'vue'
 import type { Contact } from '../'
+
 import { NcContact, NcMenu, NcMessage } from '../'
 
 const props = defineProps<{
   contacts: Contact[]
 }>()
-// import NcContact from '../'
+
 const emits = defineEmits<{
   (e: 'changeContact', contact: Contact): void
 }>()

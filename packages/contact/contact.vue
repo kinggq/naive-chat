@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { dateFormat } from '../_utils'
-import type { Contact } from '.'
+import type { Contact } from './types'
 
 const emits = defineEmits<{
   (e: 'changeContact', contact: Contact): void

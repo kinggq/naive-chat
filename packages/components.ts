@@ -1,7 +1,8 @@
-import { NaiveChat } from './naive-chat'
-import { NcMenu } from './menu'
-import NcContact from './contact'
-import { NcMessage } from './message'
+import { NaiveChat, NaiveChatPlugin } from './naive-chat'
+
+import { NcMenu, NcMenuPlugin } from './menu'
+import { NcContact, NcContactPlugin } from './contact'
+import { NcMessage, NcMessagePlugin } from './message'
 
 export {
   NaiveChat,
@@ -10,8 +11,8 @@ export {
   NcMenu,
 }
 export default [
-  NaiveChat,
-  NcMenu,
-  NcContact,
-  NcMessage,
+  NaiveChatPlugin,
+  NcMenuPlugin,
+  NcMessagePlugin,
+  NcContactPlugin,
 ]
