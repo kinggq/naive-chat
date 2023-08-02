@@ -11,7 +11,7 @@ defineOptions({
   name: 'NcContact',
 })
 
-const contacts = inject<Ref<Contact[]>>('contacts')
+const contacts = inject<ComputedRef<Contact[]>>('last-messages')
 // const activeContact = ref<Contact | undefined>(undefined)
 const activeContact = inject<Ref<Contact>>('current-contact')
 function onClickContact(contact: Contact) {
@@ -21,7 +21,7 @@ function onClickContact(contact: Contact) {
 }
 
 function getContactClass(contact: Contact) {
-  return contact === activeContact?.value ? 'bg-gray-500/10' : 'gray-500/4 hover:gray-500/10'
+  return contact.id === activeContact?.value?.id ? 'bg-gray-500/10' : 'gray-500/4 hover:gray-500/10'
 }
 </script>
 
@@ -66,7 +66,7 @@ function getContactClass(contact: Contact) {
             flex="~ col items-center"
             text="12px gray-500/50"
           >
-            <div>{{ dateFormat(contact.lastTime) }}</div>
+            <div>{{ dateFormat(contact.lastTime!) }}</div>
             <div i-ri:notification-off-line />
           </div>
         </div>

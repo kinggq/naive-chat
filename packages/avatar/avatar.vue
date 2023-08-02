@@ -10,12 +10,9 @@ const props = withDefaults(
     rounded: 4,
   },
 )
-
+const size = `${props.size}px`
 function getImageClass() {
-  return `
-      w-${props.size}px
-      h-${props.size}px
-      rounded-${props.rounded}px`
+  return `nc-avatar rounded-${props.rounded}px`
 }
 </script>
 
@@ -27,3 +24,12 @@ function getImageClass() {
     >
   </div>
 </template>
+
+<style setup>
+.nc-avatar {
+  min-width: v-bind(size);
+  min-height: v-bind(size);
+  width: v-bind(size);
+  height: v-bind(size);
+}
+</style>

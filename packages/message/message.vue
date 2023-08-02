@@ -63,7 +63,7 @@ defineExpose({ scrollToBottom })
 </script>
 
 <template>
-  <div flex="~ col" h-full w-full overflow-hidden>
+  <div flex="~ col" h-full w-full>
     <div
       flex="~ justify-between"
       border-b="1px gray-500/10"
@@ -80,8 +80,9 @@ defineExpose({ scrollToBottom })
     <div
       ref="scrollContainer"
       flex-1
-      overflow-auto px-15px
-      py-10px
+      overflow-x-hidden
+      overflow-y-auto
+      px-15px py-10px
       @scroll="onScroll"
     >
       <div v-if="currentMessage?.loading">
@@ -96,7 +97,7 @@ defineExpose({ scrollToBottom })
           <div>
             <NcAvatar :url="item.fromUser.avatar || ''" />
           </div>
-          <div flex items-center>
+          <div flex="~" items-center overflow-hidden>
             <div v-if="item.status === 'going'">
               <div i-ri:loader-4-line text="gray-500/60" class="loading-icon" />
             </div>
@@ -104,10 +105,12 @@ defineExpose({ scrollToBottom })
               <div i-ri:error-warning-line text="red-500/80" />
             </div>
             <div
-              text="14px"
-              flex="~ items-center"
+              text="14px left"
               bg="green-500/60"
               ml-10px mr-10px
+              overflow-hidden
+
+              break-words
               rounded-6px
               px-10px py-5px
             >

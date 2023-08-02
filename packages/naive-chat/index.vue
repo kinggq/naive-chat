@@ -27,6 +27,11 @@ const currentContact = ref<Contact>()
 
 const messageStore = reactive<MessageStore>({} as MessageStore)
 const currentMessage = ref<MessageStatus>({} as MessageStatus)
+const lastMessages = computed(
+  () => contacts.value
+    .filter(item => item.lastMessage)
+    .sort((a, b) => b.lastTime! - a.lastTime!),
+)
 
 provide('message-store', messageStore)
 provide('current-message', currentMessage)
@@ -34,6 +39,7 @@ provide('current-contact', currentContact)
 provide('active-menu-key', activeMenuKey)
 provide('user-info', computed(() => props.userInfo))
 provide('contacts', contacts)
+provide('last-messages', lastMessages)
 
 const nativeMessageRef = ref<InstanceType<typeof NcMessage>>()
 
@@ -52,7 +58,14 @@ function changeContact(contact: Contact) {
       messageStore[contact.id].loading = false
       messageStore[contact.id].isEnd = isEnd
       messageStore[contact.id].data.push(...messages)
-
+      if (!messages.length)
+        return
+      const lastMsg = messages[messages.length - 1]
+      updateContact({
+        id: contact.id,
+        lastMessage: lastMsg.content,
+        lastTime: lastMsg.sendTime,
+      } as Contact)
       scrollToBottom()
     })
   }
@@ -142,7 +155,7 @@ defineExpose<{
       <NcContact v-if="activeMenuKey === 'message'" @change-contact="changeContact" />
       <div v-else />
     </div>
-    <div flex-1>
+    <div flex-1 overflow-hidden>
       <NcMessage
         v-if="currentContact"
         ref="nativeMessageRef"

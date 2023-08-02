@@ -15,7 +15,7 @@ for (let i = 0; i < 10; i++) {
     id: i + 1,
     nickname: `好友${1 + i}`,
     avatar: 'https://thirdwx.qlogo.cn/mmopen/vi_32/RMksZlPP4myx9pbGzt3PmV2FNIpia8hVHpUXbHM0RfbJtsSMEWCLicbvGuJRMpoAam3sZclNo0YtOnvJ0a8eMtyQ/132',
-    lastMessage: 'hello',
+    lastMessage: (i + 2) % 2 === 0 ? 'hello' : undefined,
     lastTime: Date.now(),
   })
 }
@@ -27,7 +27,7 @@ function changeContact(contact: Contact) {
 
 function pullMessage({ next, contactId }: PullMessageOption) {
   // console.log('pullMessage')
-  if (contactId === 1000) {
+  if (contactId === 1) {
     const messages: Message[] = []
 
     for (let i = 0; i < 20; i++) {
