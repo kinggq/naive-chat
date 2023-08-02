@@ -49,7 +49,7 @@ function pullMessage({ next, contactId }: PullMessageOption) {
   }
   else {
     asyncFn(() => {
-      next([])
+      next([], true)
     })
   }
 }

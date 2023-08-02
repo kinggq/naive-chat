@@ -55,6 +55,7 @@ function changeContact(contact: Contact) {
   else {
     scrollToBottom()
   }
+  // console.log(messageStore)
 }
 
 function emitPullMessage(next: PullMessageNext) {

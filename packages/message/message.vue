@@ -20,26 +20,42 @@ function getContentClass(content: Message) {
   return 'flex flex-justify-start'
 }
 
-function onScroll(event: Event) {
+async function onScroll(event: Event) {
   const el = event.target as HTMLElement
 
-  if (currentMessage.value.isEnd)
-    return
-  if (el.scrollTop === 0) {
-    // console.log('onScroll')
-    currentMessage.value.loading = true
-    emits('pullMessage', () => {
-      currentMessage.value.loading = false
-    })
-  }
+  theTop(el.scrollTop)
 }
 
-const scrollContainer = ref()
+watch(() => currentContact.value, () => {
+  theTop()
+})
+
+const scrollContainer = ref<HTMLElement>()
 
 async function scrollToBottom() {
   await nextTick()
   if (scrollContainer.value)
     scrollContainer.value.scrollTop = scrollContainer.value.scrollHeight
+}
+
+async function theTop(scrollTop?: number) {
+  if (currentMessage.value.isEnd)
+    return
+  if (scrollTop && scrollTop === 0) {
+    // console.log('onScroll 1')
+    currentMessage.value.loading = true
+    emits('pullMessage', () => {
+      currentMessage.value.loading = false
+    })
+  }
+  await nextTick()
+  if (scrollContainer.value?.scrollTop === 0) {
+    // console.log('onScroll 2')
+    currentMessage.value.loading = true
+    emits('pullMessage', () => {
+      currentMessage.value.loading = false
+    })
+  }
 }
 
 defineExpose({ scrollToBottom })
