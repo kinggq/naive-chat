@@ -26,6 +26,33 @@ function send() {
   emits('send', content.value)
   editableRef.value.innerHTML = ''
 }
+
+function handleEnter(event: KeyboardEvent) {
+  if (event.ctrlKey)
+    insertNewLine()
+  else
+    send()
+}
+
+function insertNewLine() {
+  const selection = window.getSelection()
+  if (!selection)
+    return
+
+  const range = selection.getRangeAt(0)
+  const br = document.createElement('br')
+  const textNode = document.createTextNode('\u00A0') // 创建一个空的文本节点
+  range.deleteContents()
+  range.insertNode(br)
+  range.collapse(false) // 将光标移动到插入的元素后面
+  range.insertNode(textNode)
+  range.selectNodeContents(textNode)
+
+  // Move the caret after the line break
+  range.collapse(false) // 将光标移动到插入的元素后面
+  selection.removeAllRanges()
+  selection.addRange(range)
+}
 </script>
 
 <template>
@@ -59,6 +86,7 @@ function send() {
       text-left
       outline-none
       contenteditable="true"
+      @keydown.enter.prevent="handleEnter"
     />
     <div px-20px py-10px text-right>
       <button btn @click="send">

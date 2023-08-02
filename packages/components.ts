@@ -4,6 +4,7 @@ import { NcMenu, NcMenuPlugin } from './menu'
 import { NcContact, NcContactPlugin } from './contact'
 import { NcMessage, NcMessagePlugin } from './message'
 import { NcAvatar, NcAvatarPlugin } from './avatar'
+import { NcEditor, NcEditorPlugin } from './editor'
 
 export {
   NaiveChat,
@@ -11,6 +12,7 @@ export {
   NcMessage,
   NcMenu,
   NcAvatar,
+  NcEditor,
 }
 export default [
   NaiveChatPlugin,
@@ -18,4 +20,5 @@ export default [
   NcMessagePlugin,
   NcContactPlugin,
   NcAvatarPlugin,
+  NcEditorPlugin,
 ]
