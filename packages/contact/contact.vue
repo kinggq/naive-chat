@@ -3,6 +3,10 @@ import { NcAvatar } from '..'
 import { dateFormat } from '../_utils'
 import type { Contact } from './types'
 
+defineProps<{
+  lastMessage?: boolean
+}>()
+
 const emits = defineEmits<{
   (e: 'changeContact', contact: Contact): void
 }>()
@@ -46,28 +50,34 @@ function getContactClass(contact: Contact) {
         @click="onClickContact(contact)"
       >
         <div
-          flex="~ items-center"
+          flex="~"
+          justify-between
         >
-          <NcAvatar :url="contact.avatar" />
-          <div flex-1 truncate pl-10px text-left>
-            <div text-14px font-400>
-              {{ contact.nickname }}
-            </div>
-            <div
-              w-full
-              truncate
-              text="gray-500/80 12px"
-            >
-              {{ contact.lastMessage }}
+          <div flex="~ items-center" overflow-hidden>
+            <NcAvatar :url="contact.avatar" />
+            <div flex-1 truncate pl-10px text-left>
+              <div text-14px font-400>
+                {{ contact.nickname }}
+              </div>
+              <div
+                w-full
+                truncate
+                text="gray-500/80 12px"
+              >
+                {{ contact.lastMessage }}
+              </div>
             </div>
           </div>
           <div
-            w-30px
+
             flex="~ col items-center"
-            text="12px gray-500/50"
+            text="12px gray-500/50 right"
+            justify-top min-w-50px
           >
-            <div>{{ dateFormat(contact.lastTime!) }}</div>
-            <div i-ri:notification-off-line />
+            <div>
+              {{ dateFormat(contact.lastTime!) }}
+            </div>
+            <div v-if="contact.quiet" i-ri:notification-off-line />
           </div>
         </div>
       </div>
