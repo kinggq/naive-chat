@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { Contact, Message, PullMessageOption } from '../packages'
+import type { Contact, Message, PullMessageOption, SendOption } from '../packages'
 import { NaiveChat } from '../packages'
 
 const userInfo = {
   nickname: 'King',
   avatar: 'https://thirdwx.qlogo.cn/mmopen/vi_32/RMksZlPP4myx9pbGzt3PmV2FNIpia8hVHpUXbHM0RfbJtsSMEWCLicbvGuJRMpoAam3sZclNo0YtOnvJ0a8eMtyQ/132',
-  id: 1,
+  id: 1000,
 }
 const contacts = ref<Contact[]>([])
 
@@ -27,7 +27,7 @@ function changeContact(contact: Contact) {
 
 function pullMessage({ next, contactId }: PullMessageOption) {
   // console.log('pullMessage')
-  if (contactId === 1) {
+  if (contactId === 1000) {
     const messages: Message[] = []
 
     for (let i = 0; i < 20; i++) {
@@ -35,8 +35,11 @@ function pullMessage({ next, contactId }: PullMessageOption) {
         id: `${i}`,
         content: `消息${i + 1}`,
         type: 'text',
+        toContactId: i % 2 !== 0 ? 1000 : 100 + i,
+        status: 'success',
+        sendTime: Date.now(),
         fromUser: {
-          id: i % 2 === 0 ? 1 : 100 + i,
+          id: i % 2 === 0 ? 1000 : 100 + i,
           avatar: i % 2 === 0
             ? 'https://thirdwx.qlogo.cn/mmopen/vi_32/RMksZlPP4myx9pbGzt3PmV2FNIpia8hVHpUXbHM0RfbJtsSMEWCLicbvGuJRMpoAam3sZclNo0YtOnvJ0a8eMtyQ/132'
             : 'https://img2.baidu.com/it/u=3681172266,4264167375&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1690995600&t=1cff4e7d456c4118076598b7c03fe190',
@@ -59,6 +62,16 @@ function asyncFn(fn: () => void) {
     fn()
   }, 3000)
 }
+
+function send({ message, next }: SendOption) {
+  asyncFn(() => {
+    next({
+      id: message.id,
+      toContactId: message.toContactId,
+      status: 'success',
+    })
+  })
+}
 </script>
 
 <template>
@@ -68,6 +81,7 @@ function asyncFn(fn: () => void) {
       :contacts="contacts"
       @change-contact="changeContact"
       @pull-message="pullMessage"
+      @send="send"
     />
   </main>
 </template>

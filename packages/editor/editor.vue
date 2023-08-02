@@ -1,4 +1,8 @@
 <script setup lang="ts">
+const emits = defineEmits<{
+  (e: 'send', content: string): void
+}>()
+
 const tools = [
   {
     name: '',
@@ -19,6 +23,8 @@ const content = ref('')
 function send() {
   if (editableRef.value)
     content.value = editableRef.value.innerHTML
+  emits('send', content.value)
+  editableRef.value.innerHTML = ''
 }
 </script>
 

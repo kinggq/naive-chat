@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Contact, Message, MessageStatus, UserInfo } from 'packages'
 import { NcAvatar } from '../'
-import NcEditor from '../editor/editor.vue'
 
 const emits = defineEmits<{
   (e: 'pullMessage', next: () => void): void
@@ -97,15 +96,23 @@ defineExpose({ scrollToBottom })
           <div>
             <NcAvatar :url="item.fromUser.avatar || ''" />
           </div>
-          <div
-            text="14px"
-            flex="~ items-center"
-            bg="green-500/60"
-            ml-10px mr-10px
-            rounded-6px
-            px-10px py-5px
-          >
-            {{ item.content }}
+          <div flex items-center>
+            <div v-if="item.status === 'going'">
+              <div i-ri:loader-4-line text="gray-500/60" class="loading-icon" />
+            </div>
+            <div v-else-if="item.status === 'error'" cursor-pointer>
+              <div i-ri:error-warning-line text="red-500/80" />
+            </div>
+            <div
+              text="14px"
+              flex="~ items-center"
+              bg="green-500/60"
+              ml-10px mr-10px
+              rounded-6px
+              px-10px py-5px
+            >
+              {{ item.content }}
+            </div>
           </div>
         </div>
       </div>
@@ -114,7 +121,18 @@ defineExpose({ scrollToBottom })
       border-t="1px gray-500/10"
       min-h-200px
     >
-      <NcEditor />
+      <slot name="editor" />
     </div>
   </div>
 </template>
+
+<style scoped>
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-icon {
+  animation: spin 1s linear infinite;
+}
+</style>

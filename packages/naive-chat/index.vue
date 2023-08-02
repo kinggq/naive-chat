@@ -2,7 +2,9 @@
 import { provide, ref } from 'vue'
 import type { Contact, PullMessageNext } from '../'
 import { NcContact, NcMenu, NcMessage } from '../'
-import type { MessageStatus, MessageStore, PullMessageOption, UserInfo } from './types'
+import NcEditor from '../editor/editor.vue'
+import type { Message, MessageStatus, MessageStore, PullMessageOption, SendOption, UserInfo } from './types'
+import { generateUUID } from '~/_utils'
 
 const props = defineProps<{
   userInfo: UserInfo
@@ -12,12 +14,14 @@ const props = defineProps<{
 const emits = defineEmits<{
   (e: 'changeContact', contact: Contact): void
   (e: 'pullMessage', { next, contactId }: PullMessageOption): void
+  (e: 'send', { message, next }: SendOption): void
 }>()
 
 defineOptions({
   name: 'NaiveChat',
 })
 
+const contacts = ref(props.contacts)
 const activeMenuKey = ref<string>('')
 const currentContact = ref<Contact>()
 
@@ -29,7 +33,7 @@ provide('current-message', currentMessage)
 provide('current-contact', currentContact)
 provide('active-menu-key', activeMenuKey)
 provide('user-info', computed(() => props.userInfo))
-provide('contacts', props.contacts)
+provide('contacts', contacts)
 
 const nativeMessageRef = ref<InstanceType<typeof NcMessage>>()
 
@@ -67,6 +71,55 @@ function scrollToBottom() {
     nativeMessageRef.value.scrollToBottom()
 }
 
+function send(content: string) {
+  const message = createMessage({ content } as Message)
+  appendMessage(message)
+  emits('send', {
+    message,
+    next(asyncMessage) {
+      updateMessage(asyncMessage as Message)
+    },
+  })
+}
+
+function updateMessage(message: Message) {
+  const index = messageStore[message.toContactId].data.findIndex(item => item.id === message.id)
+  const historyMessage = messageStore[message.toContactId].data[index]
+  messageStore[message.toContactId].data[index] = Object.assign(historyMessage, message, { toContactId: historyMessage.toContactId })
+}
+
+function appendMessage(message: Message) {
+  if (messageStore[message.toContactId]) {
+    messageStore[message.toContactId].data.push(message)
+    updateContact({
+      lastMessage: message.content,
+      lastTime: message.sendTime,
+    } as Contact)
+    scrollToBottom()
+  }
+}
+
+function updateContact(contact: Contact) {
+  contacts.value[contact.id] = {
+    ...contacts.value[contact.id],
+    ...contact,
+  }
+}
+
+function createMessage<T extends Message>(message: T): Message {
+  return {
+    ...{
+      id: generateUUID(),
+      sendTime: Date.now(),
+      type: 'text',
+      status: 'going',
+      toContactId: currentContact.value!.id,
+      fromUser: props.userInfo,
+    },
+    ...message,
+  }
+}
+
 defineExpose<{
 
 }>()
@@ -91,6 +144,10 @@ defineExpose<{
     <NcMessage
       ref="nativeMessageRef"
       @pull-message="next => emitPullMessage(next)"
-    />
+    >
+      <template #editor>
+        <NcEditor @send="send" />
+      </template>
+    </NcMessage>
   </div>
 </template>
