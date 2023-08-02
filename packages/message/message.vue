@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Contact, Message, MessageStatus, UserInfo } from 'packages'
 import { NcAvatar } from '../'
+import NcEditor from '../editor/editor.vue'
 
 const emits = defineEmits<{
   (e: 'pullMessage', next: () => void): void
@@ -112,6 +113,8 @@ defineExpose({ scrollToBottom })
     <div
       border-t="1px gray-500/10"
       min-h-200px
-    />
+    >
+      <NcEditor />
+    </div>
   </div>
 </template>
