@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { NcAvatar } from '..'
 import { dateFormat } from '../_utils'
 import type { Contact } from './types'
 
@@ -47,11 +48,7 @@ function getContactClass(contact: Contact) {
         <div
           flex="~ items-center"
         >
-          <img
-
-            h-34px w-34px rounded-4px
-            src="https://thirdwx.qlogo.cn/mmopen/vi_32/RMksZlPP4myx9pbGzt3PmV2FNIpia8hVHpUXbHM0RfbJtsSMEWCLicbvGuJRMpoAam3sZclNo0YtOnvJ0a8eMtyQ/132" alt=""
-          >
+          <NcAvatar :url="contact.avatar" />
           <div flex-1 truncate pl-10px text-left>
             <div text-14px font-400>
               {{ contact.nickname }}

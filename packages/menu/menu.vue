@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { NcAvatar } from '..'
 import type { Menu } from '.'
 
 defineOptions({
@@ -53,12 +54,7 @@ function getMenuClass(menu: Menu) {
     flex="~ col items-center"
   >
     <div mt-20px>
-      <img
-        h-30px w-30px
-        rounded-1
-
-        src="https://thirdwx.qlogo.cn/mmopen/vi_32/RMksZlPP4myx9pbGzt3PmV2FNIpia8hVHpUXbHM0RfbJtsSMEWCLicbvGuJRMpoAam3sZclNo0YtOnvJ0a8eMtyQ/132"
-      >
+      <NcAvatar url="https://thirdwx.qlogo.cn/mmopen/vi_32/RMksZlPP4myx9pbGzt3PmV2FNIpia8hVHpUXbHM0RfbJtsSMEWCLicbvGuJRMpoAam3sZclNo0YtOnvJ0a8eMtyQ/132" />
     </div>
     <div
       mt-20px

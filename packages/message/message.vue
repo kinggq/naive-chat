@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Contact, Message, MessageStatus, UserInfo } from 'packages'
+import { NcAvatar } from '../'
 
 const emits = defineEmits<{
   (e: 'pullMessage', next: () => void): void
@@ -93,7 +94,7 @@ defineExpose({ scrollToBottom })
       >
         <div :class="getContentClass(item)">
           <div>
-            <img h-36px w-36px rounded-4px :src="item.fromUser.avatar" alt="">
+            <NcAvatar :url="item.fromUser.avatar || ''" />
           </div>
           <div
             text="14px"
