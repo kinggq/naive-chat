@@ -63,7 +63,7 @@ defineExpose({ scrollToBottom })
 </script>
 
 <template>
-  <div flex="~ 1 col" overflow-hidden>
+  <div flex="~ col" h-full w-full overflow-hidden>
     <div
       flex="~ justify-between"
       border-b="1px gray-500/10"

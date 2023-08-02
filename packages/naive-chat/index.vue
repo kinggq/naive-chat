@@ -92,6 +92,7 @@ function appendMessage(message: Message) {
   if (messageStore[message.toContactId]) {
     messageStore[message.toContactId].data.push(message)
     updateContact({
+      id: message.toContactId,
       lastMessage: message.content,
       lastTime: message.sendTime,
     } as Contact)
@@ -100,10 +101,11 @@ function appendMessage(message: Message) {
 }
 
 function updateContact(contact: Contact) {
-  contacts.value[contact.id] = {
-    ...contacts.value[contact.id],
-    ...contact,
-  }
+  const index = contacts.value.findIndex(item => item.id === contact.id)
+  if (index === -1)
+    return
+  const oldContact = contacts.value[index]
+  contacts.value[index] = { ...oldContact, ...contact }
 }
 
 function createMessage<T extends Message>(message: T): Message {
@@ -140,14 +142,30 @@ defineExpose<{
       <NcContact v-if="activeMenuKey === 'message'" @change-contact="changeContact" />
       <div v-else />
     </div>
-
-    <NcMessage
-      ref="nativeMessageRef"
-      @pull-message="next => emitPullMessage(next)"
-    >
-      <template #editor>
-        <NcEditor @send="send" />
-      </template>
-    </NcMessage>
+    <div flex-1>
+      <NcMessage
+        v-if="currentContact"
+        ref="nativeMessageRef"
+        @pull-message="next => emitPullMessage(next)"
+      >
+        <template #editor>
+          <NcEditor @send="send" />
+        </template>
+      </NcMessage>
+      <slot v-else name="default-page">
+        <div
+          h-full
+          w-full
+          flex="~"
+          items-center
+          justify-center
+        >
+          <div
+            text="gray-500/50 100px"
+            i-ri:wechat-line
+          />
+        </div>
+      </slot>
+    </div>
   </div>
 </template>

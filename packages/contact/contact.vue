@@ -11,7 +11,7 @@ defineOptions({
   name: 'NcContact',
 })
 
-const contacts = inject<Contact[]>('contacts')
+const contacts = inject<Ref<Contact[]>>('contacts')
 // const activeContact = ref<Contact | undefined>(undefined)
 const activeContact = inject<Ref<Contact>>('current-contact')
 function onClickContact(contact: Contact) {
