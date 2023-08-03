@@ -4,7 +4,7 @@ export interface UserInfo {
   avatar: string
 }
 
-export type ContentType = 'text'
+export type ContentType = 'text' | 'event'
 
 export interface FromUser {
   id: number

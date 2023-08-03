@@ -172,7 +172,32 @@ function createMessage<T extends Message>(message: T): Message {
 }
 
 function addMessage(messages: Message[], contactId: number, type: 'push' | 'unshift') {
-  messageStore[contactId].data[type](...messages)
+  const result: Message[] = []
+
+  function pushMessage(timer: number) {
+    result.push({
+      id: '__TIME__',
+      content: '时间',
+      type: 'event',
+    } as Message)
+  }
+  messages.forEach((item, index) => {
+    const prev = messages[index - 1]
+    if (prev) {
+      if (item.sendTime - prev.sendTime > 1000 * 60)
+        pushMessage(item.sendTime)
+    }
+    else {
+      const len = messageStore[contactId].data.length
+      if (!len)
+        pushMessage(item.sendTime)
+      else
+      if (item.sendTime - messageStore[contactId].data[len - 1].sendTime > 1000 * 60)
+        pushMessage(item.sendTime)
+    }
+    result.push(item)
+  })
+  messageStore[contactId].data[type](...result)
 }
 
 let contactIndex = ''

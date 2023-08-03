@@ -16,7 +16,7 @@ const currentContact = inject<Ref<Contact>>('current-contact')!
 const currentMessage = inject<Ref<MessageStatus>>('current-message')!
 
 function getContentClass(content: Message) {
-  if (content.fromUser.id === userInfo?.value.id)
+  if (content?.fromUser?.id === userInfo?.value.id)
     return 'flex flex-row-reverse'
   return 'flex flex-justify-start'
 }
@@ -61,7 +61,7 @@ defineExpose({ scrollToBottom })
 </script>
 
 <template>
-  <div flex="~ col" h-full w-full bg="gray/10">
+  <div flex="~ col" h-full w-full bg="gray-500/8">
     <div
       flex="~ justify-between"
       border-b="1px gray-500/10"
@@ -96,9 +96,16 @@ defineExpose({ scrollToBottom })
         :key="item.id"
         w-full py-10px
       >
-        <div :class="getContentClass(item)">
+        <div v-if="item.type === 'event'">
+          <span
+            text="12px gray-800/60"
+          >
+            {{ item.content }}
+          </span>
+        </div>
+        <div v-else :class="getContentClass(item)">
           <div>
-            <NcAvatar :url="item.fromUser.avatar || ''" />
+            <NcAvatar :url="item?.fromUser?.avatar || ''" />
           </div>
           <div flex="~" items-center overflow-hidden>
             <div v-if="item.status === 'going'">
@@ -107,12 +114,18 @@ defineExpose({ scrollToBottom })
             <div v-else-if="item.status === 'error'" cursor-pointer>
               <div i-ri:error-warning-line text="red-500/80" />
             </div>
-            <div relative overflow-hidden p-x-5px>
+            <div relative overflow-hidden>
               <div
+
                 text="14px left"
-                :bg="`${item.fromUser.id === userInfo?.id ? 'green-500/60' : 'white'}`"
+                :bg="`${item?.fromUser?.id === userInfo?.id ? 'green-600/60' : 'white/80'}`"
+                flex="~"
                 relative
+
                 ml-10px mr-10px
+
+                min-h-36px
+                items-center
                 overflow-hidden
                 break-words
                 rounded-6px
