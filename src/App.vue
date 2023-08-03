@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import type { Contact, Message, PullMessageOption, SendOption } from '../packages'
 import { NaiveChat } from '../packages'
+import { generateUUID } from '../packages/_utils'
 
 const userInfo = {
   nickname: 'King',
@@ -30,11 +31,10 @@ function pullMessage({ next, contactId }: PullMessageOption) {
   // console.log('pullMessage')
   if (contactId === 1) {
     const messages: Message[] = []
-
     for (let i = 0; i < 20; i++) {
       messages.push({
-        id: `${i}`,
-        content: `消息${i + 1}`,
+        id: generateUUID(),
+        content: `消息${generateUUID() + i}`,
         type: 'text',
         toContactId: i % 2 !== 0 ? 1000 : 100 + i,
         status: 'success',

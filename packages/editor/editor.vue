@@ -40,6 +40,11 @@ function updateContent() {
     content.value = editableRef.value.innerText
 }
 
+function focusInput() {
+  if (editableRef.value)
+    editableRef.value.focus()
+}
+
 function insertNewLine() {
   const selection = window.getSelection()
   if (!selection)
@@ -59,6 +64,10 @@ function insertNewLine() {
   selection.removeAllRanges()
   selection.addRange(range)
 }
+
+defineExpose({
+  focusInput,
+})
 </script>
 
 <template>
@@ -88,7 +97,7 @@ function insertNewLine() {
       h-60px
       flex-1
       overflow-auto
-      p-5px
+      px-20px py-5px
       text-left
       outline-none
       contenteditable="true"

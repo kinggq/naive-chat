@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { provide, ref } from 'vue'
-import type { Contact, Menu, MenuKey, PullMessageNext } from '../'
+import type { Contact, Menu, MenuKey } from '../'
 import { NcAvatar, NcContact, NcMenu, NcMessage } from '../'
 import NcEditor from '../editor/editor.vue'
 import type { Message, MessageStatus, MessageStore, PullMessageOption, SendOption, UserInfo } from './types'
@@ -45,6 +45,7 @@ const menus = ref<Menu[]>([
 const contacts = ref(props.contacts)
 const activeMenuKey = ref<MenuKey>('message')
 const currentContact = ref<Contact>()
+const editorRef = ref<InstanceType<typeof NcEditor>>()
 
 const messageStore = reactive<MessageStore>({} as MessageStore)
 const currentMessage = ref<MessageStatus>({} as MessageStatus)
@@ -71,35 +72,47 @@ watchEffect(() => {
 
 function changeLastMessage(contact: Contact) {
   currentContact.value = contact
+
   if (!messageStore[contact.id]) {
     messageStore[contact.id] = {
       loading: true,
       data: [],
       isEnd: false,
     }
-    emitPullMessage((messages, isEnd = false) => {
-      messageStore[contact.id].loading = false
-      messageStore[contact.id].isEnd = isEnd
-      messageStore[contact.id].data.push(...messages)
-      if (!messages.length)
-        return
-      const lastMsg = messages[messages.length - 1]
-      updateContact({
-        id: contact.id,
-        lastMessage: lastMsg.content,
-        lastTime: lastMsg.sendTime,
-      } as Contact)
+    emitPullMessage(() => {
       scrollToBottom()
-    })
+    }, contact.id)
   }
   else {
     scrollToBottom()
   }
+  focusInput()
   // console.log(messageStore)
 }
 
-function emitPullMessage(next: PullMessageNext) {
-  emits('pullMessage', { contactId: currentContact.value!.id, next })
+async function focusInput() {
+  await nextTick()
+  editorRef.value?.focusInput()
+}
+
+function emitPullMessage(next: () => void, contactId?: number) {
+  emits('pullMessage', {
+    contactId: currentContact.value!.id,
+    next(messages, isEnd) {
+      messageStore[contactId!].loading = false
+      messageStore[contactId!].isEnd = !!isEnd
+      addMessage(messages, contactId!, 'unshift')
+      if (!messages.length)
+        return
+      const lastMsg = messages[messages.length - 1]
+      updateContact({
+        id: contactId,
+        lastMessage: lastMsg.content,
+        lastTime: lastMsg.sendTime,
+      } as Contact)
+      next()
+    },
+  })
 }
 
 function scrollToBottom() {
@@ -126,7 +139,7 @@ function updateMessage(message: Message) {
 
 function appendMessage(message: Message) {
   if (messageStore[message.toContactId]) {
-    messageStore[message.toContactId].data.push(message)
+    addMessage([message], message.toContactId, 'push')
     updateContact({
       id: message.toContactId,
       lastMessage: message.content,
@@ -156,6 +169,10 @@ function createMessage<T extends Message>(message: T): Message {
     },
     ...message,
   }
+}
+
+function addMessage(messages: Message[], contactId: number, type: 'push' | 'unshift') {
+  messageStore[contactId].data[type](...messages)
 }
 
 let contactIndex = ''
@@ -256,10 +273,10 @@ defineExpose<{
       <NcMessage
         v-if="currentContact && activeMenuKey === 'message'"
         ref="nativeMessageRef"
-        @pull-message="next => emitPullMessage(next)"
+        @pull-message="emitPullMessage"
       >
         <template #editor>
-          <NcEditor @send="send" />
+          <NcEditor ref="editorRef" @send="send" />
         </template>
       </NcMessage>
       <div v-else-if="activeMenuKey === 'contact'" h-full>

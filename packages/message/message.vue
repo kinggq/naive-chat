@@ -3,7 +3,7 @@ import type { Contact, Message, MessageStatus, UserInfo } from 'packages'
 import { NcAvatar } from '../'
 
 const emits = defineEmits<{
-  (e: 'pullMessage', next: () => void): void
+  (e: 'pullMessage', next: () => void, contactId: number): void
 }>()
 
 defineOptions({
@@ -23,15 +23,15 @@ function getContentClass(content: Message) {
 
 async function onScroll(event: Event) {
   const el = event.target as HTMLElement
-
   theTop(el.scrollTop)
 }
 
-watch(() => currentContact.value, () => {
-  theTop()
-})
-
 const scrollContainer = ref<HTMLElement>()
+
+watch(() => currentContact.value, async () => {
+  await nextTick()
+  theTop(scrollContainer.value?.scrollTop)
+})
 
 async function scrollToBottom() {
   await nextTick()
@@ -42,20 +42,18 @@ async function scrollToBottom() {
 async function theTop(scrollTop?: number) {
   if (currentMessage.value.isEnd)
     return
-  if (scrollTop && scrollTop === 0) {
+
+  if (scrollTop === 0) {
     // console.log('onScroll 1')
     currentMessage.value.loading = true
+    await nextTick()
+    const scrollHeight = scrollContainer.value!.scrollHeight
     emits('pullMessage', () => {
       currentMessage.value.loading = false
-    })
-  }
-  await nextTick()
-  if (scrollContainer.value?.scrollTop === 0) {
-    // console.log('onScroll 2')
-    currentMessage.value.loading = true
-    emits('pullMessage', () => {
-      currentMessage.value.loading = false
-    })
+      setTimeout(() => {
+        scrollContainer.value!.scrollTop = scrollContainer.value!.scrollHeight - scrollHeight
+      })
+    }, currentContact.value.id)
   }
 }
 
@@ -63,7 +61,7 @@ defineExpose({ scrollToBottom })
 </script>
 
 <template>
-  <div flex="~ col" h-full w-full>
+  <div flex="~ col" h-full w-full bg="gray/10">
     <div
       flex="~ justify-between"
       border-b="1px gray-500/10"
@@ -85,8 +83,13 @@ defineExpose({ scrollToBottom })
       px-15px py-10px
       @scroll="onScroll"
     >
-      <div v-if="currentMessage?.loading">
-        Loading...
+      <div flex="~" justify-center>
+        <div
+          v-if="currentMessage?.loading"
+          i-ri:loader-4-line
+          text="gray-500/60"
+          class="loading-icon"
+        />
       </div>
       <div
         v-for="item in (currentMessage ?? {}).data"
@@ -104,17 +107,19 @@ defineExpose({ scrollToBottom })
             <div v-else-if="item.status === 'error'" cursor-pointer>
               <div i-ri:error-warning-line text="red-500/80" />
             </div>
-            <div
-              text="14px left"
-              bg="green-500/60"
-              ml-10px mr-10px
-              overflow-hidden
-
-              break-words
-              rounded-6px
-              px-10px py-5px
-            >
-              {{ item.content }}
+            <div relative overflow-hidden p-x-5px>
+              <div
+                text="14px left"
+                :bg="`${item.fromUser.id === userInfo?.id ? 'green-500/60' : 'white'}`"
+                relative
+                ml-10px mr-10px
+                overflow-hidden
+                break-words
+                rounded-6px
+                px-10px py-5px
+              >
+                {{ item.content }}
+              </div>
             </div>
           </div>
         </div>
