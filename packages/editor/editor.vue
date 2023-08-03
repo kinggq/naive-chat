@@ -25,6 +25,7 @@ function send() {
     content.value = editableRef.value.innerHTML
   emits('send', content.value)
   editableRef.value.innerHTML = ''
+  content.value = ''
 }
 
 function handleEnter(event: KeyboardEvent) {
@@ -32,6 +33,11 @@ function handleEnter(event: KeyboardEvent) {
     insertNewLine()
   else
     send()
+}
+
+function updateContent() {
+  if (editableRef.value)
+    content.value = editableRef.value.innerText
 }
 
 function insertNewLine() {
@@ -87,9 +93,10 @@ function insertNewLine() {
       outline-none
       contenteditable="true"
       @keydown.enter.prevent="handleEnter"
+      @input="updateContent"
     />
     <div px-20px py-10px text-right>
-      <button btn @click="send">
+      <button btn :disabled="!content.trim()" @click="send">
         <slot>
           发送
         </slot>
