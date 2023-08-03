@@ -10,7 +10,7 @@ const userInfo = {
 }
 const contacts = ref<Contact[]>([])
 
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 20; i++) {
   contacts.value.push({
     id: i + 1,
     nickname: `好友${1 + i}`,

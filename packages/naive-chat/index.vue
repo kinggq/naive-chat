@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { provide, ref } from 'vue'
-import type { Contact, PullMessageNext } from '../'
+import type { Contact, MenuKey, PullMessageNext } from '../'
 import { NcContact, NcMenu, NcMessage } from '../'
 import NcEditor from '../editor/editor.vue'
 import type { Message, MessageStatus, MessageStore, PullMessageOption, SendOption, UserInfo } from './types'
@@ -22,7 +22,7 @@ defineOptions({
 })
 
 const contacts = ref(props.contacts)
-const activeMenuKey = ref<string>('')
+const activeMenuKey = ref<MenuKey>('message')
 const currentContact = ref<Contact>()
 
 const messageStore = reactive<MessageStore>({} as MessageStore)
@@ -36,7 +36,7 @@ const lastMessages = computed(
 provide('message-store', messageStore)
 provide('current-message', currentMessage)
 provide('current-contact', currentContact)
-provide('active-menu-key', activeMenuKey)
+provide<Ref<MenuKey>>('active-menu-key', activeMenuKey)
 provide('user-info', computed(() => props.userInfo))
 provide('contacts', contacts)
 provide('last-messages', lastMessages)
@@ -47,7 +47,8 @@ watchEffect(() => {
   currentMessage.value = messageStore[currentContact.value?.id || NaN]
 })
 
-function changeContact(contact: Contact) {
+function changeLastMessage(contact: Contact) {
+  currentContact.value = contact
   if (!messageStore[contact.id]) {
     messageStore[contact.id] = {
       loading: true,
@@ -152,12 +153,37 @@ defineExpose<{
       border-r
       flex="~ col"
     >
-      <NcContact v-if="activeMenuKey === 'message'" @change-contact="changeContact" />
-      <div v-else />
+      <div v-if="activeMenuKey === 'message'" overflow-y-auto>
+        <slot name="sidebar-header">
+          <div px-10px py-10px bg="gray/2">
+            <input
+              w-full
+              rounded-2px
+              px-10px py-2px text-14px
+              bg="gray/10"
+              type="text"
+              placeholder="搜索"
+            >
+          </div>
+        </slot>
+        <NcContact
+          v-for="item in lastMessages" :key="item.id"
+          :contact="item"
+          :last-message="true"
+          @click="changeLastMessage(item)"
+        />
+      </div>
+      <div v-else-if="activeMenuKey === 'contact'" overflow-y-auto>
+        <NcContact
+          v-for="item in contacts"
+          :key="item.id"
+          :contact="item"
+        />
+      </div>
     </div>
     <div flex-1 overflow-hidden>
       <NcMessage
-        v-if="currentContact"
+        v-if="currentContact && activeMenuKey === 'message'"
         ref="nativeMessageRef"
         @pull-message="next => emitPullMessage(next)"
       >

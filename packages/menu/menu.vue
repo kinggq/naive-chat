@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NcAvatar } from '..'
-import type { Menu } from '.'
+import type { Menu, MenuKey } from './types'
 
 defineOptions({
   name: 'NcMenu',
@@ -26,7 +26,7 @@ const menus = ref<Menu[]>([
     active: false,
   },
 ])
-const activeMenuKey = inject<Ref<string>>('active-menu-key')
+const activeMenuKey = inject<Ref<MenuKey>>('active-menu-key')
 
 activeMenuKey!.value = menus.value.filter(item => item.active)[0].key
 
