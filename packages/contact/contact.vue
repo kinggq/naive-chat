@@ -3,7 +3,7 @@ import { NcAvatar } from '..'
 import { dateFormat } from '../_utils'
 import type { Contact } from './types'
 
-const props = defineProps<{
+defineProps<{
   contact: Contact
   lastMessage?: boolean
 }>()
@@ -11,20 +11,12 @@ const props = defineProps<{
 defineOptions({
   name: 'NcContact',
 })
-
-const activeContact = inject<Ref<Contact>>('current-contact')
-
-function getContactClass(contact: Contact) {
-  if (props.lastMessage)
-    return contact.id === activeContact?.value?.id ? 'bg-gray-500/10' : 'gray-500/4 hover:gray-500/10'
-}
 </script>
 
 <template>
   <div
     cursor-pointer
     p-10px
-    :class="getContactClass(contact)"
   >
     <div
       flex="~"

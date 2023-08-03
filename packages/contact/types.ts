@@ -5,4 +5,5 @@ export interface Contact {
   lastTime?: number
   avatar: string
   quiet?: boolean
+  index: string
 }

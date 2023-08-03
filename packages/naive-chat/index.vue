@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { provide, ref } from 'vue'
-import type { Contact, MenuKey, PullMessageNext } from '../'
-import { NcContact, NcMenu, NcMessage } from '../'
+import type { Contact, Menu, MenuKey, PullMessageNext } from '../'
+import { NcAvatar, NcContact, NcMenu, NcMessage } from '../'
 import NcEditor from '../editor/editor.vue'
 import type { Message, MessageStatus, MessageStore, PullMessageOption, SendOption, UserInfo } from './types'
 import { generateUUID } from '~/_utils'
@@ -21,6 +21,27 @@ defineOptions({
   name: 'NaiveChat',
 })
 
+const menus = ref<Menu[]>([
+  {
+    key: 'message',
+    icon: 'i-ri:chat-3-line',
+    activeIcon: 'i-ri:chat-3-fill',
+    active: true,
+  },
+  {
+    key: 'contact',
+    icon: 'i-ri:contacts-line',
+    activeIcon: 'i-ri:contacts-fill',
+    active: false,
+  },
+  {
+    key: 'more',
+    icon: 'i-ri:more-line',
+    activeIcon: 'i-ri:more-fill',
+    active: false,
+  },
+])
+
 const contacts = ref(props.contacts)
 const activeMenuKey = ref<MenuKey>('message')
 const currentContact = ref<Contact>()
@@ -33,6 +54,7 @@ const lastMessages = computed(
     .sort((a, b) => b.lastTime! - a.lastTime!),
 )
 
+provide('menus', menus)
 provide('message-store', messageStore)
 provide('current-message', currentMessage)
 provide('current-contact', currentContact)
@@ -136,6 +158,38 @@ function createMessage<T extends Message>(message: T): Message {
   }
 }
 
+let contactIndex = ''
+function innerContactIndex(index: string) {
+  if (index !== contactIndex) {
+    contactIndex = index
+    return true
+  }
+
+  return false
+}
+
+const currentOpenContact = ref<Contact>()
+provide('current-open-contact', currentOpenContact)
+function handleClickContact(contact: Contact) {
+  currentOpenContact.value = contact
+}
+
+function toMessage(contact: Contact) {
+  activeMenuKey.value = 'message'
+  menus.value.forEach((item) => {
+    if (item.key === activeMenuKey.value)
+      item.active = true
+    else
+      item.active = false
+  })
+  updateContact({
+    id: contact.id,
+    lastMessage: ' ',
+    lastTime: Date.now(),
+  } as Contact)
+  changeLastMessage(contact)
+}
+
 defineExpose<{
 
 }>()
@@ -153,7 +207,7 @@ defineExpose<{
       border-r
       flex="~ col"
     >
-      <div v-if="activeMenuKey === 'message'" overflow-y-auto>
+      <div v-if="activeMenuKey === 'message'" overflow-hidden flex="~ col">
         <slot name="sidebar-header">
           <div px-10px py-10px bg="gray/2">
             <input
@@ -166,19 +220,36 @@ defineExpose<{
             >
           </div>
         </slot>
-        <NcContact
-          v-for="item in lastMessages" :key="item.id"
-          :contact="item"
-          :last-message="true"
-          @click="changeLastMessage(item)"
-        />
+        <div flex-1 overflow-y-auto>
+          <NcContact
+            v-for="item in lastMessages" :key="item.id"
+            :contact="item"
+            :last-message="true"
+            :class="item.id === currentContact?.id ? 'bg-gray-500/10' : 'gray-500/4 hover:gray-500/10'"
+            @click="changeLastMessage(item)"
+          />
+        </div>
       </div>
       <div v-else-if="activeMenuKey === 'contact'" overflow-y-auto>
-        <NcContact
+        <div
           v-for="item in contacts"
           :key="item.id"
-          :contact="item"
-        />
+        >
+          <div
+            v-show="innerContactIndex(item.index)"
+            text="left 12px gray-500/50"
+            px-10px
+          >
+            <div py-10px border-b="1px gray-500/6">
+              {{ item.index }}
+            </div>
+          </div>
+          <NcContact
+            :contact="item"
+            :class="item.id === currentOpenContact?.id ? 'bg-gray-500/10' : 'gray-500/4 hover:gray-500/10'"
+            @click="handleClickContact(item)"
+          />
+        </div>
       </div>
     </div>
     <div flex-1 overflow-hidden>
@@ -191,6 +262,24 @@ defineExpose<{
           <NcEditor @send="send" />
         </template>
       </NcMessage>
+      <div v-else-if="activeMenuKey === 'contact'" h-full>
+        <div
+          v-if="currentOpenContact"
+          h-full
+          flex items-center
+          justify-center
+        >
+          <div>
+            <NcAvatar :size="100" :url="currentOpenContact.avatar" />
+            <div py-20px text="gray-800/90" font-500>
+              {{ currentOpenContact.nickname }}
+            </div>
+            <button btn @click="toMessage(currentOpenContact)">
+              发送消息
+            </button>
+          </div>
+        </div>
+      </div>
       <slot v-else name="default-page">
         <div
           h-full

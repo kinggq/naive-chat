@@ -17,6 +17,7 @@ for (let i = 0; i < 20; i++) {
     avatar: 'https://thirdwx.qlogo.cn/mmopen/vi_32/RMksZlPP4myx9pbGzt3PmV2FNIpia8hVHpUXbHM0RfbJtsSMEWCLicbvGuJRMpoAam3sZclNo0YtOnvJ0a8eMtyQ/132',
     lastMessage: (i + 2) % 2 === 0 ? 'hello' : undefined,
     lastTime: Date.now(),
+    index: i <= 3 ? 'A' : i > 3 && i <= 7 ? 'C' : 'D',
   })
 }
 // console.log('1')

@@ -6,26 +6,7 @@ defineOptions({
   name: 'NcMenu',
 })
 
-const menus = ref<Menu[]>([
-  {
-    key: 'message',
-    icon: 'i-ri:chat-3-line',
-    activeIcon: 'i-ri:chat-3-fill',
-    active: true,
-  },
-  {
-    key: 'contact',
-    icon: 'i-ri:contacts-line',
-    activeIcon: 'i-ri:contacts-fill',
-    active: false,
-  },
-  {
-    key: 'more',
-    icon: 'i-ri:more-line',
-    activeIcon: 'i-ri:more-fill',
-    active: false,
-  },
-])
+const menus = inject<Ref<Menu[]>>('menus')!
 const activeMenuKey = inject<Ref<MenuKey>>('active-menu-key')
 
 activeMenuKey!.value = menus.value.filter(item => item.active)[0].key
