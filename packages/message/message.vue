@@ -11,6 +11,12 @@ defineOptions({
   name: 'NcMessage',
 })
 
+const messageHeaderRef = ref<HTMLElement>()
+const messageContainerRef = ref<HTMLElement>()
+
+const headerClientHeight = computed(() => messageHeaderRef.value?.clientHeight)
+const containerClientHeight = computed(() => messageContainerRef.value?.clientHeight)
+
 const userInfo = inject<ComputedRef<UserInfo>>('user-info')
 const currentContact = inject<Ref<Contact>>('current-contact')!
 
@@ -57,13 +63,40 @@ async function theTop(scrollTop?: number) {
     }, currentContact.value.id)
   }
 }
+function getHeaderClass() {
+  if (!containerClientHeight.value || !headerClientHeight.value)
+    return
+  return `height: ${containerClientHeight.value - headerClientHeight.value}px;` + `top:${headerClientHeight.value}px;`
+}
 
+const showSidebar = ref(false)
+function toggleSidebar() {
+  showSidebar.value = !showSidebar.value
+}
 defineExpose({ scrollToBottom })
 </script>
 
 <template>
-  <div flex="~ col" h-full w-full bg="gray-500/8">
+  <div ref="messageContainerRef" flex="~ col" relative h-full w-full bg="gray-500/8">
+    <transition name="side">
+      <div
+        v-if="showSidebar"
+        absolute
+        bottom-0
+        right-0
+        z-100
+        w-300px
+        border-l="1px gray-500/10"
+        bg="white"
+        :style="getHeaderClass()"
+      >
+        <slot name="message-sidebar">
+          <div>Hi, I'm King,{{ getHeaderClass() }}</div>
+        </slot>
+      </div>
+    </transition>
     <div
+      ref="messageHeaderRef"
       flex="~ justify-between"
       border-b="1px gray-500/10"
       px-20px py-15px
@@ -74,10 +107,11 @@ defineExpose({ scrollToBottom })
       >
         {{ currentContact?.nickname }}
       </div>
-      <div i-ri:more-line />
+      <div i-ri:more-line @click="toggleSidebar" />
     </div>
     <div
       ref="scrollContainer"
+      relative
       flex-1
       overflow-x-hidden
       overflow-y-auto
@@ -187,6 +221,17 @@ defineExpose({ scrollToBottom })
 }
 
 .loading-icon {
-  animation: spin 1s linear infinite;
+  animation: spin 2s linear infinite;
+}
+.slide-enter-active, .slide-leave-active {
+  transition: transform 2s ease;
+}
+
+.slide-enter-from, .slide-leave-to {
+  transform: translateX(100%);
+}
+
+.slide-enter-to, .slide-leave-from {
+  transform: translateX(0);
 }
 </style>
