@@ -27,28 +27,148 @@ function changeContact(contact: Contact) {
   Boolean(contact.avatar)
 }
 
+const avatar1 = 'https://img2.baidu.com/it/u=3681172266,4264167375&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1690995600&t=1cff4e7d456c4118076598b7c03fe190'
+const avatar2 = 'https://thirdwx.qlogo.cn/mmopen/vi_32/RMksZlPP4myx9pbGzt3PmV2FNIpia8hVHpUXbHM0RfbJtsSMEWCLicbvGuJRMpoAam3sZclNo0YtOnvJ0a8eMtyQ/132'
+const messages: Message[] = [
+  {
+    id: generateUUID(),
+    content: `消息${generateUUID()}`,
+    type: 'text',
+    toContactId: 1000,
+    status: 'success',
+    sendTime: 1690639200000,
+    fromUser: {
+      id: 1,
+      avatar: avatar1,
+    },
+  },
+  {
+    id: generateUUID(),
+    content: `消息${generateUUID()}`,
+    type: 'text',
+    toContactId: 1000,
+    status: 'success',
+    sendTime: 1690624800000,
+    fromUser: {
+      id: 1,
+      avatar: avatar1,
+    },
+  },
+  {
+    id: generateUUID(),
+    content: `消息${generateUUID()}`,
+    type: 'text',
+    toContactId: 1,
+    status: 'success',
+    sendTime: 1690740000000,
+    fromUser: {
+      id: 1000,
+      avatar: avatar2,
+    },
+  },
+  {
+    id: generateUUID(),
+    content: `消息${generateUUID()}`,
+    type: 'text',
+    toContactId: 1000,
+    status: 'success',
+    sendTime: 1690714800000,
+    fromUser: {
+      id: 1,
+      avatar: avatar1,
+    },
+  },
+  {
+    id: generateUUID(),
+    content: `消息${generateUUID()}`,
+    type: 'text',
+    toContactId: 1000,
+    status: 'success',
+    sendTime: 1690992000000,
+    fromUser: {
+      id: 1,
+      avatar: avatar1,
+    },
+  },
+  {
+    id: generateUUID(),
+    content: `消息${generateUUID()}`,
+    type: 'text',
+    toContactId: 1000,
+    status: 'success',
+    sendTime: 1690992000000,
+    fromUser: {
+      id: 1,
+      avatar: avatar1,
+    },
+  },
+  {
+    id: generateUUID(),
+    content: `消息${generateUUID()}`,
+    type: 'text',
+    toContactId: 1000,
+    status: 'success',
+    sendTime: 1690992000000,
+    fromUser: {
+      id: 1,
+      avatar: avatar1,
+    },
+  },
+  {
+    id: generateUUID(),
+    content: `消息${generateUUID()}`,
+    type: 'text',
+    toContactId: 1,
+    status: 'success',
+    sendTime: 1690966800000,
+    fromUser: {
+      id: 1000,
+      avatar: avatar2,
+    },
+  },
+  {
+    id: generateUUID(),
+    content: `消息${generateUUID()}`,
+    type: 'text',
+    toContactId: 1,
+    status: 'success',
+    sendTime: 1691074800000,
+    fromUser: {
+      id: 1000,
+      avatar: avatar2,
+    },
+  },
+  {
+    id: generateUUID(),
+    content: `消息${generateUUID()}`,
+    type: 'text',
+    toContactId: 1,
+    status: 'success',
+    sendTime: 1691074800000,
+    fromUser: {
+      id: 1000,
+      avatar: avatar2,
+    },
+  },
+  {
+    id: generateUUID(),
+    content: `消息${generateUUID()}`,
+    type: 'text',
+    toContactId: 1000,
+    status: 'success',
+    sendTime: 1691056800000,
+    fromUser: {
+      id: 1,
+      avatar: avatar1,
+    },
+  },
+]
+
 function pullMessage({ next, contactId }: PullMessageOption) {
   // console.log('pullMessage')
   if (contactId === 1) {
-    const messages: Message[] = []
-    for (let i = 0; i < 20; i++) {
-      messages.push({
-        id: generateUUID(),
-        content: `消息${generateUUID() + i}`,
-        type: 'text',
-        toContactId: i % 2 !== 0 ? 1000 : 100 + i,
-        status: 'success',
-        sendTime: Date.now(),
-        fromUser: {
-          id: i % 2 === 0 ? 1000 : 100 + i,
-          avatar: i % 2 === 0
-            ? 'https://thirdwx.qlogo.cn/mmopen/vi_32/RMksZlPP4myx9pbGzt3PmV2FNIpia8hVHpUXbHM0RfbJtsSMEWCLicbvGuJRMpoAam3sZclNo0YtOnvJ0a8eMtyQ/132'
-            : 'https://img2.baidu.com/it/u=3681172266,4264167375&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1690995600&t=1cff4e7d456c4118076598b7c03fe190',
-        },
-      })
-    }
     asyncFn(() => {
-      next(messages)
+      next(messages, true)
     })
   }
   else {

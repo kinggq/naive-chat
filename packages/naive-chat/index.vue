@@ -4,7 +4,7 @@ import type { Contact, Menu, MenuKey } from '../'
 import { NcAvatar, NcContact, NcMenu, NcMessage } from '../'
 import NcEditor from '../editor/editor.vue'
 import type { Message, MessageStatus, MessageStore, PullMessageOption, SendOption, UserInfo } from './types'
-import { generateUUID } from '~/_utils'
+import { formatTime, generateUUID } from '~/_utils'
 
 const props = defineProps<{
   userInfo: UserInfo
@@ -177,7 +177,7 @@ function addMessage(messages: Message[], contactId: number, type: 'push' | 'unsh
   function pushMessage(timer: number) {
     result.push({
       id: '__TIME__',
-      content: '时间',
+      content: formatTime(timer),
       type: 'event',
     } as Message)
   }

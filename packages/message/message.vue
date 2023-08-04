@@ -90,6 +90,9 @@ defineExpose({ scrollToBottom })
           text="gray-500/60"
           class="loading-icon"
         />
+        <div v-if="currentMessage.isEnd" text="gray-800/50 12px">
+          暂无更多消息
+        </div>
       </div>
       <div
         v-for="item in (currentMessage ?? {}).data"
