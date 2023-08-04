@@ -1,0 +1,20 @@
+.idea
+.vscode
+.github
+test/
+src/
+packages/
+public/
+node_modules/
+ 
+# 忽略指定文件
+tsconfig.json
+tslint.json
+shims.d.ts
+auto-imports.d.ts
+components.d.ts
+uno.config.ts
+vite.config.ts
+.gitignore
+.browserslistrc
+*.map

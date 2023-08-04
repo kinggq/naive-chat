@@ -1,3 +1,4 @@
+import type { UserConfig } from 'unocss'
 import {
   defineConfig,
   presetAttributify,
@@ -28,4 +29,4 @@ export default defineConfig({
       },
     }),
   ],
-})
+}) as UserConfig<any>

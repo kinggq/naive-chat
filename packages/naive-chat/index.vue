@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { provide, ref } from 'vue'
-import type { Contact, ContentType, Menu, MenuKey } from '../'
+import type { Contact, Menu, MenuKey } from '../'
 import NcEditor from '../editor/editor.vue'
 import NcAvatar from '../avatar/avatar.vue'
 import NcContact from '../contact/contact.vue'
 import NcMenu from '../menu/menu.vue'
 import NcMessage from '../message/message.vue'
+import { formatTime, generateUUID } from '../_utils'
 import type { Message, MessageStatus, MessageStore, PullMessageOption, SendOption, UserInfo } from './types'
-import { formatTime, generateUUID } from '~/_utils'
 
 const props = defineProps<{
   userInfo: UserInfo
@@ -110,7 +110,7 @@ function emitPullMessage(next: () => void, contactId?: number) {
       const lastMsg = messages[messages.length - 1]
       updateContact({
         id: contactId,
-        lastMessage: lastMsg.content,
+        lastMessage: renderLastMessage(lastMsg),
         lastTime: lastMsg.sendTime,
       } as Contact)
       next()
@@ -145,14 +145,15 @@ function appendMessage(message: Message) {
     addMessage([message], message.toContactId, 'push')
     updateContact({
       id: message.toContactId,
-      lastMessage: renderLastMessage(message.content, message.type, message.fileName),
+      lastMessage: renderLastMessage(message),
       lastTime: message.sendTime,
     } as Contact)
     scrollToBottom()
   }
 }
 
-function renderLastMessage(content: string, type: ContentType, fileName?: string) {
+function renderLastMessage(message: Message) {
+  const { type, content, fileName } = message
   if (type === 'text' || type === 'event')
     return content
   else if (type === 'image')

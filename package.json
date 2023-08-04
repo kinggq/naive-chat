@@ -1,8 +1,13 @@
 {
-  "private": true,
+  "name": "naive-chat",
+  "version": "0.0.10",
+  "private": false,
   "packageManager": "pnpm@8.6.0",
+  "main": "dist/naive-chat.mjs",
+  "types": "dist/packages/index.d.ts",
   "scripts": {
     "build": "vite build",
+    "build:dts": "tsc --emitDeclarationOnly",
     "dev": "vite --port 3333 --open",
     "lint": "eslint .",
     "typecheck": "vue-tsc --noEmit",
@@ -38,6 +43,7 @@
     "unplugin-vue-components": "^0.25.0",
     "unplugin-vue-macros": "^2.2.1",
     "vite": "^4.3.9",
+    "vite-plugin-dts": "^3.4.0",
     "vitest": "^0.31.4",
     "vue-tsc": "^1.6.5"
   },

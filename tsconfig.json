@@ -19,8 +19,21 @@
       "unplugin-vue-macros/macros-global"
     ],
     "paths": {
-      "~/*": ["packages/*"]
+      "~/*": ["packages/*"],
+      "naive-chat": ["node_modules/naive-chat"]
     }
   },
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["dist", "node_modules"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "packages/**/*.ts",
+    "packages/**/*.vue",
+    "test/**/*.ts",
+    "uno.config.ts",
+    "shims.d.ts",
+    "auto-imports.d.ts",
+    "components.d.ts",
+    "vite.config.ts"
+  ]
 }
