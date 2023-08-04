@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { provide, ref } from 'vue'
-import type { Contact, Menu, MenuKey } from '../'
-import { NcAvatar, NcContact, NcMenu, NcMessage } from '../'
+import type { Contact, ContentType, Menu, MenuKey } from '../'
 import NcEditor from '../editor/editor.vue'
+import NcAvatar from '../avatar/avatar.vue'
+import NcContact from '../contact/contact.vue'
+import NcMenu from '../menu/menu.vue'
+import NcMessage from '../message/message.vue'
 import type { Message, MessageStatus, MessageStore, PullMessageOption, SendOption, UserInfo } from './types'
 import { formatTime, generateUUID } from '~/_utils'
 
@@ -14,7 +17,7 @@ const props = defineProps<{
 const emits = defineEmits<{
   (e: 'changeContact', contact: Contact): void
   (e: 'pullMessage', { next, contactId }: PullMessageOption): void
-  (e: 'send', { message, next }: SendOption): void
+  (e: 'send', { message, next, file }: SendOption): void
 }>()
 
 defineOptions({
@@ -142,11 +145,20 @@ function appendMessage(message: Message) {
     addMessage([message], message.toContactId, 'push')
     updateContact({
       id: message.toContactId,
-      lastMessage: message.content,
+      lastMessage: renderLastMessage(message.content, message.type, message.fileName),
       lastTime: message.sendTime,
     } as Contact)
     scrollToBottom()
   }
+}
+
+function renderLastMessage(content: string, type: ContentType, fileName?: string) {
+  if (type === 'text' || type === 'event')
+    return content
+  else if (type === 'image')
+    return '[图片]'
+  else if (type === 'file')
+    return `[文件] ${fileName}`
 }
 
 function updateContact(contact: Contact) {
@@ -208,6 +220,36 @@ function innerContactIndex(index: string) {
   }
 
   return false
+}
+
+function uploadFile(file: File) {
+  const imagesType = ['image/png', 'image/jpeg', 'image/gif']
+  let message: Message
+  if (imagesType.includes(file.type)) {
+    message = {
+      content: URL.createObjectURL(file),
+      type: 'image',
+      fileName: file.name,
+      fileSize: file.size,
+    } as Message
+  }
+  else {
+    message = {
+      content: '',
+      type: 'file',
+      fileName: file.name,
+      fileSize: file.size,
+    } as Message
+  }
+  const result = createMessage(message)
+  appendMessage(result)
+  emits('send', {
+    message: result,
+    next(asyncMessage) {
+      updateMessage(asyncMessage as Message)
+    },
+    file,
+  })
 }
 
 const currentOpenContact = ref<Contact>()
@@ -301,7 +343,7 @@ defineExpose<{
         @pull-message="emitPullMessage"
       >
         <template #editor>
-          <NcEditor ref="editorRef" @send="send" />
+          <NcEditor ref="editorRef" @send="send" @upload="uploadFile" />
         </template>
       </NcMessage>
       <div v-else-if="activeMenuKey === 'contact'" h-full>

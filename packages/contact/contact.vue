@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NcAvatar } from '..'
-import { dateFormat } from '../_utils'
+import { formatDate } from '../_utils'
 import type { Contact } from './types'
 
 defineProps<{
@@ -44,8 +44,8 @@ defineOptions({
         text="12px gray-500/50 right"
         justify-top min-w-50px
       >
-        <div>
-          {{ dateFormat(contact.lastTime!) }}
+        <div w-full text-right>
+          {{ formatDate(contact.lastTime!) }}
         </div>
         <div v-if="contact.quiet" i-ri:notification-off-line />
       </div>

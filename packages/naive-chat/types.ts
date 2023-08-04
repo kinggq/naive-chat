@@ -4,7 +4,7 @@ export interface UserInfo {
   avatar: string
 }
 
-export type ContentType = 'text' | 'event'
+export type ContentType = 'text' | 'event' | 'file' | 'image'
 
 export interface FromUser {
   id: number
@@ -21,6 +21,8 @@ export interface Message {
   fromUser: FromUser
   sendTime: number
   status: SendMessageStatus
+  fileName?: string
+  fileSize?: number
 }
 
 export type PullMessageNext = (message: Message[], isEnd?: boolean) => void
@@ -49,4 +51,5 @@ type SomeOptionalMessage = {
 export interface SendOption {
   message: Message
   next: (message: SomeOptionalMessage) => void
+  file?: File
 }

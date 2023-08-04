@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Contact, Message, MessageStatus, UserInfo } from 'packages'
 import { NcAvatar } from '../'
+import { formatFileSize, getFileIcon } from '../_utils'
 
 const emits = defineEmits<{
   (e: 'pullMessage', next: () => void, contactId: number): void
@@ -119,7 +120,7 @@ defineExpose({ scrollToBottom })
             </div>
             <div relative overflow-hidden>
               <div
-
+                v-if="item.type === 'text'"
                 text="14px left"
                 :bg="`${item?.fromUser?.id === userInfo?.id ? 'green-600/60' : 'white/80'}`"
                 flex="~"
@@ -135,6 +136,35 @@ defineExpose({ scrollToBottom })
                 px-10px py-5px
               >
                 {{ item.content }}
+              </div>
+              <div v-else-if="item.type === 'image'" mx-10px>
+                <img
+                  max-w-100px
+                  :src="item.content"
+                  alt=""
+                >
+              </div>
+              <div v-else-if="item.type === 'file'">
+                <div
+                  flex="~"
+                  bg="white"
+                  mx-10px
+                  h-70px w-200px
+                  items-center
+                  justify-between
+                  rounded
+                  p-10px
+                >
+                  <div text-left>
+                    <div text="14px gray-800/80">
+                      {{ item.fileName }}
+                    </div>
+                    <div text="12px gray/50" mt-10px>
+                      {{ formatFileSize(item.fileSize!) }}
+                    </div>
+                  </div>
+                  <div text="40px purple/90" :class="getFileIcon(item.fileName || '')" />
+                </div>
               </div>
             </div>
           </div>
