@@ -134,7 +134,7 @@ defineExpose({ scrollToBottom })
         :key="item.id"
         w-full py-10px
       >
-        <div v-if="item.type === 'event'">
+        <div v-if="item.type === 'event'" text-center>
           <span
             text="12px gray-800/60"
           >
