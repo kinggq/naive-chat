@@ -1,41 +1,117 @@
-<p align='center'>
-  <img src='https://user-images.githubusercontent.com/11247099/111864893-a457fd00-899e-11eb-9f05-f4b88987541d.png' alt='Vitesse - Opinionated Vite Starter Template' width='600'/>
-</p>
+## Install
 
-<h6 align='center'>
-<a href="https://vitesse-lite.netlify.app/">Live Demo</a>
-</h6>
+```bash
+npm i naive-chat@latest
+```
 
-<h5 align='center'>
-<b>Lightweight version of <a href="https://github.com/antfu/vitesse">Vitesse</a></b>
-</h5>
+## Usage
+
+```ts
+// main.ts
+import 'naive-chat/dist/style.css'
+```
+
+```ts
+import type { Contact, Message, PullMessageOption, SendOption } from 'naive-chat'
+
+import { NaiveChat } from 'naive-chat'
+
+// user info
+const userInfo = {
+  nickname: 'King',
+  avatar: '',
+  id: 1000,
+}
+
+const contacts = ref<Contact[]>([
+  {
+    id: 1,
+    nickname: '',
+    avatar: '',
+    lastMessage: '',
+    lastTime: Date.now(),
+    index: 'A',
+  }
+])
+
+const messages: Message[] = [
+  {
+    id: generateUUID(),
+    content: '',
+    type: 'file',
+    toContactId: 1000,
+    status: 'success',
+    sendTime: 1691056800000,
+    fileName: '艳萍简历.doc',
+    fileSize: 18238,
+    fromUser: {
+      id: 1,
+      avatar: avatar1,
+    },
+  },
+  {
+    id: generateUUID(),
+    content: '',
+    type: 'file',
+    toContactId: 1,
+    status: 'success',
+    sendTime: 1691056800000,
+    fileName: '我的简历.js',
+    fileSize: 18238,
+    fromUser: {
+      id: 1000,
+      avatar: avatar2,
+    },
+  },
+]
+
+function pullMessage({ next, contactId }: PullMessageOption) {
+  // console.log('pullMessage')
+  if (contactId === 1) {
+    asyncFn(() => {
+      next(messages, true)
+    })
+  }
+  else {
+    asyncFn(() => {
+      next([], true)
+    })
+  }
+}
+
+function asyncFn(fn: () => void) {
+  setTimeout(() => {
+    fn()
+  }, 1000)
+}
+
+function send({ message, next }: SendOption) {
+  asyncFn(() => {
+    next({
+      id: message.id,
+      toContactId: message.toContactId,
+      status: 'success',
+    })
+  })
+}
+```
+
+```html
+<NaiveChat
+  :user-info="userInfo"
+  :contacts="contacts"
+  @change-contact="changeContact"
+  @pull-message="pullMessage"
+  @send="send"
+/>
+```
 
 <br>
 
-<p align='center'>
-<b>English</b> | <a href="https://github.com/antfu/vitesse-lite/blob/main/README.zh-CN.md">简体中文</a>
-<!-- Contributors: Thanks for geting interested, however we DON'T accept new transitions to the README, thanks. -->
-</p>
+## Preview
 
-## Features
+![](https://user-images.githubusercontent.com/10386838…58769802-07cfafd5-32ee-48cd-b224-350725dd9bd3.png)
 
-- ⚡️ [Vue 3](https://github.com/vuejs/core), [Vite 3](https://github.com/vitejs/vite), [pnpm](https://pnpm.io/), [ESBuild](https://github.com/evanw/esbuild) - born with fastness
+![](https://user-images.githubusercontent.com/10386838…58770066-5740b50f-101c-497b-ba81-bf20eaa1e74f.png)
 
-- 🗂 [File based routing](./src/pages)
-
-- 📦 [Components auto importing](./src/components)
-
-- 🎨 [UnoCSS](https://github.com/antfu/unocss) - The instant on-demand atomic CSS engine.
-
-- 😃 Use icons from any icon sets in [Pure CSS](https://github.com/antfu/unocss/tree/main/packages/preset-icons)
-
-- 🔥 Use the [new `<script setup>` style](https://github.com/vuejs/rfcs/pull/227)
-
-- ✅ Use [Vitest](http://vitest.dev/) for unit and components testing
-
-- 🦾 TypeScript, of course
-
-- ☁️ Deploy on Netlify, zero-config
-
-
-<br>
+![](https://user-images.githubusercontent.com/10386838…58770545-b04583e9-86cc-4fe6-8ee5-f25708ab2285.png)

@@ -171,7 +171,7 @@ const messages: Message[] = [
     toContactId: 1000,
     status: 'success',
     sendTime: 1691056800000,
-    fileName: '艳萍简历.doc',
+    fileName: '简历.doc',
     fileSize: 18238,
     fromUser: {
       id: 1,
@@ -185,7 +185,7 @@ const messages: Message[] = [
     toContactId: 1,
     status: 'success',
     sendTime: 1691056800000,
-    fileName: '我的简历.js',
+    fileName: '修改简历.doc',
     fileSize: 18238,
     fromUser: {
       id: 1000,
