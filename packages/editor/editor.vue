@@ -6,16 +6,8 @@ const emits = defineEmits<{
 
 const tools = [
   {
-    name: 'emoji',
-    icon: 'i-ri:emotion-line',
-  },
-  {
     name: 'file',
     icon: 'i-ri:folder-2-line',
-  },
-  {
-    name: 'other',
-    icon: 'i-mdi:comment-processing-outline',
   },
 ]
 
@@ -107,16 +99,20 @@ defineExpose({
       <div
 
         flex="~ gap5" items-center
+        justify-between
         text="18px gray-500/60 "
       >
-        <div
-          v-for="i in tools"
-          :key="i.icon"
-          text="hover:green/80"
-          cursor-pointer
-          :class="`${i.icon} text-hover:green/80` "
-          @click="toolClick(i.name)"
-        />
+        <slot name="message-tools" :upload="changeInputFile">
+          <div
+            v-for="i in tools"
+            :key="i.icon"
+            text="hover:green/80"
+            cursor-pointer
+            :class="`${i.icon} text-hover:green/80` "
+            @click="toolClick(i.name)"
+          />
+        </slot>
+        <slot name="message-tools-right" />
       </div>
       <div />
     </div>

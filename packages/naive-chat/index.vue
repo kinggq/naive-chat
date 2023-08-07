@@ -389,7 +389,14 @@ defineExpose({
         @message-contextmenu="message => emits('messageContextmenu', message)"
       >
         <template #editor>
-          <NcEditor ref="editorRef" @send="send" @upload="uploadFile" />
+          <NcEditor ref="editorRef" @send="send" @upload="uploadFile">
+            <template #message-tools="{ upload }">
+              <slot name="message-tools" :upload-event="upload" />
+            </template>
+            <template #message-tools-right>
+              <slot name="message-tools-right" />
+            </template>
+          </NcEditor>
         </template>
       </NcMessage>
       <div v-else-if="activeMenuKey === 'contact'" h-full>
