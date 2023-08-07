@@ -73,9 +73,16 @@ watchEffect(() => {
   currentMessage.value = messageStore[currentContact.value?.id || NaN]
 })
 
+function getCurrentContact() {
+  return currentContact.value
+}
+
 function changeLastMessage(contact: Contact) {
   currentContact.value = contact
-
+  updateContact({
+    id: contact.id,
+    unread: 0,
+  } as Contact)
   if (!messageStore[contact.id]) {
     messageStore[contact.id] = {
       loading: true,
@@ -150,6 +157,14 @@ function appendMessage(message: Message) {
     } as Contact)
     scrollToBottom()
   }
+  else {
+    updateContact({
+      id: message.fromUser.id,
+      lastMessage: renderLastMessage(message),
+      lastTime: message.sendTime,
+      unread: 1,
+    } as Contact)
+  }
 }
 
 function renderLastMessage(message: Message) {
@@ -167,7 +182,13 @@ function updateContact(contact: Contact) {
   if (index === -1)
     return
   const oldContact = contacts.value[index]
-  contacts.value[index] = { ...oldContact, ...contact }
+  contacts.value[index] = {
+    ...oldContact,
+    ...contact,
+    unread: contact.id === currentContact.value?.id
+      ? 0
+      : (oldContact.unread || 0) + (contact.unread || 0),
+  }
 }
 
 function createMessage<T extends Message>(message: T): Message {
@@ -275,9 +296,27 @@ function toMessage(contact: Contact) {
   changeLastMessage(contact)
 }
 
-defineExpose<{
+function appendContact(contact: Contact) {
+  contacts.value.push(contact)
+}
 
-}>()
+function removeContact(id: number) {
+  contacts.value = contacts.value.filter(item => item.id !== id)
+}
+
+function clearMessage(id: number) {
+  messageStore[id].data = []
+}
+
+defineExpose({
+  appendMessage,
+  updateContact,
+  updateMessage,
+  getCurrentContact,
+  appendContact,
+  removeContact,
+  clearMessage,
+})
 </script>
 
 <template>

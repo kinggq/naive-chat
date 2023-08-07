@@ -8,6 +8,7 @@ import { NcContact, NcContactPlugin } from './contact'
 import { NcMessage, NcMessagePlugin } from './message'
 import { NcAvatar, NcAvatarPlugin } from './avatar'
 import { NcEditor, NcEditorPlugin } from './editor'
+import { NcBadge, NcBadgePlugin } from './badge'
 
 export type NaiveChatType = InstanceType<typeof NaiveChat>
 export type NcMenuType = InstanceType<typeof NcMenu>
@@ -15,6 +16,7 @@ export type NcContactType = InstanceType<typeof NcContact>
 export type NcAvatarType = InstanceType<typeof NcAvatar>
 export type NcMessageType = InstanceType<typeof NcMessage>
 export type NcEditorType = InstanceType<typeof NcEditor>
+export type NcBadgeType = InstanceType<typeof NcBadge>
 
 const components = [
   NaiveChatPlugin,
@@ -23,6 +25,7 @@ const components = [
   NcContactPlugin,
   NcAvatarPlugin,
   NcEditorPlugin,
+  NcBadgePlugin,
 ]
 const NaiveChatP: Plugin = {
   install(app: App) {
@@ -39,6 +42,7 @@ export {
   NcMenu,
   NcAvatar,
   NcEditor,
+  NcBadge,
 }
 export * from './types'
 export default NaiveChatP

@@ -12,13 +12,15 @@ const userInfo = {
 const contacts = ref<Contact[]>([])
 
 for (let i = 0; i < 20; i++) {
+  const id = i + 1
   contacts.value.push({
-    id: i + 1,
+    id,
     nickname: `好友${1 + i}`,
     avatar: 'https://thirdwx.qlogo.cn/mmopen/vi_32/RMksZlPP4myx9pbGzt3PmV2FNIpia8hVHpUXbHM0RfbJtsSMEWCLicbvGuJRMpoAam3sZclNo0YtOnvJ0a8eMtyQ/132',
-    lastMessage: (i + 2) % 2 === 0 ? 'hello' : undefined,
+    lastMessage: (i + 2) % 2 === 0 ? 'helloooooooo00000000' : undefined,
     lastTime: i === 6 ? 1690639200000 : Date.now(),
     index: i <= 3 ? 'A' : i > 3 && i <= 7 ? 'C' : 'D',
+    unread: id === 1 ? 10 : id === 3 ? 2 : 0,
   })
 }
 // console.log('1')
