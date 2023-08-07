@@ -18,6 +18,9 @@ const emits = defineEmits<{
   (e: 'changeContact', contact: Contact): void
   (e: 'pullMessage', { next, contactId }: PullMessageOption): void
   (e: 'send', { message, next, file }: SendOption): void
+  (e: 'messageAvatarClick', message: Message): void
+  (e: 'messageClick', message: Message): void
+  (e: 'messageContextmenu', message: Message): void
 }>()
 
 defineOptions({
@@ -381,6 +384,9 @@ defineExpose({
         v-if="currentContact && activeMenuKey === 'message'"
         ref="nativeMessageRef"
         @pull-message="emitPullMessage"
+        @message-avatar-click="message => emits('messageAvatarClick', message)"
+        @message-click="message => emits('messageClick', message)"
+        @message-contextmenu="message => emits('messageContextmenu', message)"
       >
         <template #editor>
           <NcEditor ref="editorRef" @send="send" @upload="uploadFile" />

@@ -5,6 +5,9 @@ import { formatFileSize, getFileIcon } from '../_utils'
 
 const emits = defineEmits<{
   (e: 'pullMessage', next: () => void, contactId: number): void
+  (e: 'messageAvatarClick', message: Message): void
+  (e: 'messageClick', message: Message): void
+  (e: 'messageContextmenu', message: Message): void
 }>()
 
 defineOptions({
@@ -69,10 +72,27 @@ function getHeaderClass() {
   return `height: ${containerClientHeight.value - headerClientHeight.value}px;` + `top:${headerClientHeight.value}px;`
 }
 
+function clickAvatar(message: Message) {
+  emits('messageAvatarClick', message)
+}
+
+function clickMessage(message: Message) {
+  emits('messageClick', message)
+}
+
+function contextmenuMessage(message: Message) {
+  emits('messageContextmenu', message)
+}
+
 const showSidebar = ref(false)
 function toggleSidebar() {
   showSidebar.value = !showSidebar.value
 }
+
+watch(() => currentContact.value, () => {
+  showSidebar.value = false
+})
+
 defineExpose({ scrollToBottom })
 </script>
 
@@ -90,8 +110,8 @@ defineExpose({ scrollToBottom })
         bg="white"
         :style="getHeaderClass()"
       >
-        <slot name="message-sidebar">
-          <div>Hi, I'm King,{{ getHeaderClass() }}</div>
+        <slot name="message-sidebar" :contact="currentContact">
+          <div>Hi,</div>
         </slot>
       </div>
     </transition>
@@ -143,7 +163,7 @@ defineExpose({ scrollToBottom })
         </div>
         <div v-else :class="getContentClass(item)">
           <div>
-            <NcAvatar :url="item?.fromUser?.avatar || ''" />
+            <NcAvatar :url="item?.fromUser?.avatar || ''" @click="clickAvatar(item)" />
           </div>
           <div flex="~" items-center overflow-hidden>
             <div v-if="item.status === 'going'">
@@ -152,7 +172,12 @@ defineExpose({ scrollToBottom })
             <div v-else-if="item.status === 'error'" cursor-pointer>
               <div i-ri:error-warning-line text="red-500/80" />
             </div>
-            <div relative overflow-hidden>
+            <div
+              relative
+              overflow-hidden
+              @click="clickMessage(item)"
+              @contextmenu.prevent="contextmenuMessage(item)"
+            >
               <div
                 v-if="item.type === 'text'"
                 text="14px left"
