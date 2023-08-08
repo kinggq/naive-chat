@@ -21,6 +21,7 @@ const emits = defineEmits<{
   (e: 'messageAvatarClick', message: Message): void
   (e: 'messageClick', message: Message): void
   (e: 'messageContextmenu', message: Message): void
+  (e: 'menuClick', menuKey: string, menu: Menu): void
 }>()
 
 defineOptions({
@@ -325,60 +326,63 @@ defineExpose({
 <template>
   <div
     h-650px w-800px
-    border rounded-4px
+    border="1px gray-500/10" rounded-4px
     flex="~"
   >
-    <NcMenu />
+    <NcMenu @menu-click="(menuKey, menu) => emits('menuClick', menuKey, menu)" />
     <div
       h-full w-220px
       border-r
       flex="~ col"
     >
-      <div v-if="activeMenuKey === 'message'" overflow-hidden flex="~ col">
-        <slot name="sidebar-header">
-          <div px-10px py-10px bg="gray/2">
-            <input
-              h-36px
-              w-full
-              rounded-2px
-              px-10px py-2px text-12px
-              bg="gray/10"
-              type="text"
-              placeholder="自定义头部信息"
-            >
-          </div>
-        </slot>
-        <div flex-1 overflow-y-auto>
-          <NcContact
-            v-for="item in lastMessages" :key="item.id"
-            :contact="item"
-            :last-message="true"
-            :class="item.id === currentContact?.id ? 'bg-gray-500/10' : 'gray-500/4 hover:gray-500/10'"
-            @click="changeLastMessage(item)"
-          />
-        </div>
-      </div>
-      <div v-else-if="activeMenuKey === 'contact'" overflow-y-auto>
-        <div
-          v-for="item in contacts"
-          :key="item.id"
-        >
-          <div
-            v-show="innerContactIndex(item.index)"
-            text="left 12px gray-500/50"
-            px-10px
-          >
-            <div py-10px border-b="1px gray-500/6">
-              {{ item.index }}
+      <slot name="sidebar">
+        <div v-if="activeMenuKey === 'message'" overflow-hidden flex="~ col">
+          <slot name="sidebar-header">
+            <div px-10px py-10px bg="gray/2">
+              <input
+                h-36px
+                w-full
+                rounded-2px
+                px-10px py-2px text-12px
+                bg="gray/10"
+                type="text"
+                placeholder="自定义头部信息"
+              >
             </div>
+          </slot>
+          <div flex-1 overflow-y-auto>
+            <NcContact
+              v-for="item in lastMessages" :key="item.id"
+              :contact="item"
+              :last-message="true"
+              :class="item.id === currentContact?.id ? 'bg-gray-500/10' : 'gray-500/4 hover:gray-500/10'"
+              @click="changeLastMessage(item)"
+            />
           </div>
-          <NcContact
-            :contact="item"
-            :class="item.id === currentOpenContact?.id ? 'bg-gray-500/10' : 'gray-500/4 hover:gray-500/10'"
-            @click="handleClickContact(item)"
-          />
         </div>
-      </div>
+        <div v-else-if="activeMenuKey === 'contact'" overflow-y-auto>
+          <div
+            v-for="item in contacts"
+            :key="item.id"
+          >
+            <div
+              v-show="innerContactIndex(item.index)"
+              text="left 12px gray-500/50"
+              px-10px
+            >
+              <div py-10px border-b="1px gray-500/6">
+                {{ item.index }}
+              </div>
+            </div>
+            <NcContact
+              :contact="item"
+              :class="item.id === currentOpenContact?.id ? 'bg-gray-500/10' : 'gray-500/4 hover:gray-500/10'"
+              @click="handleClickContact(item)"
+            />
+          </div>
+        </div>
+        <slot name="sidebar-other" />
+      </slot>
     </div>
     <div flex-1 overflow-hidden>
       <NcMessage

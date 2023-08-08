@@ -15,7 +15,7 @@ export const contacts = [
     id: 1,
     nickname: '王局',
     avatar: 'http://rz1wa9fyb.hb-bkt.clouddn.com/wang.jpeg',
-    lastMessage: '今天改善一下伙食',
+    lastMessage: '今天吃点好的',
     lastTime: 1690639200000,
     index: 'W',
     unread: 1,

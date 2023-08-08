@@ -3,6 +3,10 @@ import type { Contact } from '..'
 import { NcAvatar, NcBadge } from '..'
 import type { Menu, MenuKey } from './types'
 
+const emits = defineEmits<{
+  (e: 'menuClick', menuKey: string, menu: Menu): void
+}>()
+
 defineOptions({
   name: 'NcMenu',
 })
@@ -19,6 +23,7 @@ function onClickMenu(menu: Menu) {
   })
   menu.active = true
   activeMenuKey!.value = menu.key
+  emits('menuClick', menu.key, menu)
 }
 
 function getMenuClass(menu: Menu) {

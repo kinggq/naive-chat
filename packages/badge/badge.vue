@@ -2,7 +2,9 @@
 const props = withDefaults(defineProps<{
   count?: number
   isDot?: boolean
+  max?: number
 }>(), {
+  max: 99,
 })
 
 const showCount = computed(() => {
@@ -13,7 +15,7 @@ const showCount = computed(() => {
 
 const badgeClass = computed(() => {
   if (showCount.value)
-    return 'rounded-10px color-white px-5px top--5px right--4px h-18px'
+    return 'rounded-10px color-white px-6px top--5px right--4px h-16px line-height-16px'
   return 'w-8px h-8px rounded top--2px right--4px'
 })
 </script>
@@ -27,7 +29,7 @@ const badgeClass = computed(() => {
       bg="red"
       :class="badgeClass"
     >
-      {{ showCount ? count : '' }}
+      {{ showCount ? (count > max ? `${max}+` : count) : '' }}
     </div>
   </div>
 </template>
