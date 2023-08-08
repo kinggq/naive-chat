@@ -107,7 +107,7 @@ defineExpose({ scrollToBottom })
         z-100
         w-300px
         border-l="1px gray-500/10"
-        bg="white"
+        bg="white dark:#272727"
         :style="getHeaderClass()"
       >
         <slot name="message-sidebar" :contact="currentContact">

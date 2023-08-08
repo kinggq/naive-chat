@@ -9,5 +9,15 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    BaseHeader: typeof import('./src/components/BaseHeader.vue')['default']
+    Contact: typeof import('./src/components/Contact.vue')['default']
+    ContactType: typeof import('./src/components/ContactType.vue')['default']
+    copy: typeof import('./src/components/UserInfo copy.vue')['default']
+    Events: typeof import('./src/components/Events.vue')['default']
+    Message: typeof import('./src/components/Message.vue')['default']
+    Methods: typeof import('./src/components/Methods.vue')['default']
+    Props: typeof import('./src/components/Props.vue')['default']
+    Slots: typeof import('./src/components/Slots.vue')['default']
+    UserInfo: typeof import('./src/components/UserInfo.vue')['default']
   }
 }

@@ -55,21 +55,26 @@ const count = computed(() => {
       <NcAvatar url="https://thirdwx.qlogo.cn/mmopen/vi_32/RMksZlPP4myx9pbGzt3PmV2FNIpia8hVHpUXbHM0RfbJtsSMEWCLicbvGuJRMpoAam3sZclNo0YtOnvJ0a8eMtyQ/132" />
     </div>
     <div
-      mt-20px
-      w-full py-10px text-20px
-      flex="~ col gap6 items-center"
+      flex="~ 1 col items-center"
+
+      mt-20px w-full justify-between py-10px text-20px
     >
       <div
-        v-for="menu in menus"
-        :key="menu.key"
-        cursor-pointer
-        @click="onClickMenu(menu)"
+        flex="~ col  gap6"
       >
-        <NcBadge v-if="menu.key === 'message'" :count="count">
-          <div :class="getMenuClass(menu)" />
-        </NcBadge>
-        <div v-else :class="getMenuClass(menu)" />
+        <div
+          v-for="menu in menus"
+          :key="menu.key"
+          cursor-pointer
+          @click="onClickMenu(menu)"
+        >
+          <NcBadge v-if="menu.key === 'message'" :count="count">
+            <div :class="getMenuClass(menu)" />
+          </NcBadge>
+          <div v-else :class="getMenuClass(menu)" />
+        </div>
       </div>
+      <slot name="menu-footer" />
     </div>
   </div>
 </template>

@@ -346,7 +346,7 @@ defineExpose({
       border-r="1px gray-800/10"
       flex="~ col"
     >
-      <slot name="sidebar">
+      <slot name="sidebar-contact">
         <div v-if="activeMenuKey === 'message'" overflow-hidden flex="~ col">
           <slot name="sidebar-header">
             <div px-10px py-10px bg="gray/2">
@@ -372,6 +372,11 @@ defineExpose({
           </div>
         </div>
         <div v-else-if="activeMenuKey === 'contact'" overflow-y-auto>
+          <slot name="sidebar-contact-header">
+            <div px-10px py-10px bg="gray/2">
+              自定义头部信息
+            </div>
+          </slot>
           <div
             v-for="item in contacts"
             :key="item.id"
