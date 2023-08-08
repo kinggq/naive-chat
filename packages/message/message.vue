@@ -145,7 +145,7 @@ defineExpose({ scrollToBottom })
           text="gray-500/60"
           class="loading-icon"
         />
-        <div v-if="currentMessage.isEnd" text="gray-800/50 12px">
+        <div v-if="currentMessage.isEnd" text="gray-800/50 12px dark:gray">
           暂无更多消息
         </div>
       </div>
@@ -156,7 +156,7 @@ defineExpose({ scrollToBottom })
       >
         <div v-if="item.type === 'event'" text-center>
           <span
-            text="12px gray-800/60"
+            text="12px gray-800/60 dark:gray"
           >
             {{ item.content }}
           </span>
@@ -181,7 +181,7 @@ defineExpose({ scrollToBottom })
               <div
                 v-if="item.type === 'text'"
                 text="14px left"
-                :bg="`${item?.fromUser?.id === userInfo?.id ? 'green-600/60' : 'white/80'}`"
+                :bg="`${item?.fromUser?.id === userInfo?.id ? 'green-600/60 dark:green-600' : 'white/80 dark:gray-500/50'}`"
                 flex="~"
                 relative
 
@@ -206,16 +206,17 @@ defineExpose({ scrollToBottom })
               <div v-else-if="item.type === 'file'">
                 <div
                   flex="~"
-                  bg="white"
+                  bg="white dark:gray/10"
                   mx-10px
                   h-70px w-200px
+                  cursor-pointer
                   items-center
                   justify-between
                   rounded
                   p-10px
                 >
                   <div text-left>
-                    <div text="14px gray-800/80">
+                    <div text="14px gray-800/80 dark:white">
                       {{ item.fileName }}
                     </div>
                     <div text="12px gray/50" mt-10px>

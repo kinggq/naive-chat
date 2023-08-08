@@ -1,13 +1,18 @@
 <script setup lang="ts">
-import type { Contact, PullMessageOption, SendOption } from '../packages'
+import type { Contact, NaiveChatType, PullMessageOption, SendOption } from '../packages'
 import { NaiveChat } from '../packages'
 import { contacts, messages } from './utils'
 
+const naiveChatRef = ref<NaiveChatType>()
 const userInfo = {
   nickname: 'King',
   avatar: 'https://thirdwx.qlogo.cn/mmopen/vi_32/RMksZlPP4myx9pbGzt3PmV2FNIpia8hVHpUXbHM0RfbJtsSMEWCLicbvGuJRMpoAam3sZclNo0YtOnvJ0a8eMtyQ/132',
   id: 1000,
 }
+
+onMounted(() => {
+  naiveChatRef.value?.initContacts(contacts)
+})
 
 // console.log('1')
 function changeContact(contact: Contact) {
@@ -49,8 +54,8 @@ function send({ message, next }: SendOption) {
 <template>
   <main font-sans p="x-4 y-10" text="center gray-700 dark:gray-200">
     <NaiveChat
+      ref="naiveChatRef"
       :user-info="userInfo"
-      :contacts="contacts"
       @change-contact="changeContact"
       @pull-message="pullMessage"
       @send="send"

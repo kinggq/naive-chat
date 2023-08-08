@@ -46,8 +46,8 @@ const count = computed(() => {
 <template>
   <div
     h-full min-w-60px
-    border-r
-    bg="gray-900/10"
+    border-r="gray-500/10"
+    bg="gray-900/10 dark:gray-900/60"
     py-10px
     flex="~ col items-center"
   >

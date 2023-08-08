@@ -9,10 +9,12 @@ import NcMessage from '../message/message.vue'
 import { formatTime, generateUUID } from '../_utils'
 import type { Message, MessageStatus, MessageStore, PullMessageOption, SendOption, UserInfo } from './types'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   userInfo: UserInfo
-  contacts: Contact[]
-}>()
+  openFirst?: boolean
+}>(), {
+  openFirst: true,
+})
 
 const emits = defineEmits<{
   (e: 'changeContact', contact: Contact): void
@@ -49,7 +51,7 @@ const menus = ref<Menu[]>([
   },
 ])
 
-const contacts = ref(props.contacts)
+const contacts = ref<Contact[]>([])
 const activeMenuKey = ref<MenuKey>('message')
 const currentContact = ref<Contact>()
 const editorRef = ref<InstanceType<typeof NcEditor>>()
@@ -58,7 +60,7 @@ const messageStore = reactive<MessageStore>({} as MessageStore)
 const currentMessage = ref<MessageStatus>({} as MessageStatus)
 const lastMessages = computed(
   () => contacts.value
-    .filter(item => item.lastMessage)
+    ?.filter(item => item.lastMessage)
     .sort((a, b) => b.lastTime! - a.lastTime!),
 )
 
@@ -76,6 +78,12 @@ const nativeMessageRef = ref<InstanceType<typeof NcMessage>>()
 watchEffect(() => {
   currentMessage.value = messageStore[currentContact.value?.id || NaN]
 })
+
+function initContacts(cts: Contact[]) {
+  contacts.value = cts
+  if (cts.length > 0)
+    changeLastMessage(cts[0])
+}
 
 function getCurrentContact() {
   return currentContact.value
@@ -182,6 +190,8 @@ function renderLastMessage(message: Message) {
 }
 
 function updateContact(contact: Contact) {
+  if (!contacts.value)
+    return
   const index = contacts.value.findIndex(item => item.id === contact.id)
   if (index === -1)
     return
@@ -313,6 +323,7 @@ function clearMessage(id: number) {
 }
 
 defineExpose({
+  initContacts,
   appendMessage,
   updateContact,
   updateMessage,
@@ -332,7 +343,7 @@ defineExpose({
     <NcMenu @menu-click="(menuKey, menu) => emits('menuClick', menuKey, menu)" />
     <div
       h-full w-220px
-      border-r
+      border-r="1px gray-800/10"
       flex="~ col"
     >
       <slot name="sidebar">

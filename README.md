@@ -16,12 +16,18 @@ import type { Contact, Message, PullMessageOption, SendOption } from 'naive-chat
 
 import { NaiveChat } from 'naive-chat'
 
+const naiveChatRef = ref<NaiveChatType>()
+
 // user info
 const userInfo = {
   nickname: 'King',
-  avatar: '',
+  avatar: 'https://thirdwx.qlogo.cn/mmopen/vi_32/RMksZlPP4myx9pbGzt3PmV2FNIpia8hVHpUXbHM0RfbJtsSMEWCLicbvGuJRMpoAam3sZclNo0YtOnvJ0a8eMtyQ/132',
   id: 1000,
 }
+
+onMounted(() => {
+  naiveChatRef.value?.initContacts(contacts)
+})
 
 const contacts = ref<Contact[]>([
   {
@@ -98,8 +104,8 @@ function send({ message, next }: SendOption) {
 
 ```html
 <NaiveChat
+  ref="naiveChatRef"
   :user-info="userInfo"
-  :contacts="contacts"
   @change-contact="changeContact"
   @pull-message="pullMessage"
   @send="send"
