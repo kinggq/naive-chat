@@ -3,6 +3,15 @@ import { generateUUID } from '~/_utils'
 
 export const contacts = [
   {
+    id: 3,
+    nickname: '梁宏达',
+    avatar: 'http://rz1wa9fyb.hb-bkt.clouddn.com/liang.jpeg',
+    lastMessage: '老梁故事会下期节目已经准备好了',
+    lastTime: 1691056800000,
+    index: 'L',
+    unread: 1,
+  },
+  {
     id: 1,
     nickname: '王局',
     avatar: 'http://rz1wa9fyb.hb-bkt.clouddn.com/wang.jpeg',
@@ -20,15 +29,7 @@ export const contacts = [
     index: 'X',
     unread: 0,
   },
-  {
-    id: 3,
-    nickname: '梁宏达',
-    avatar: 'http://rz1wa9fyb.hb-bkt.clouddn.com/liang.jpeg',
-    lastMessage: '老梁故事会下期节目已经准备好了',
-    lastTime: 1691056800000,
-    index: 'X',
-    unread: 1,
-  },
+
 ]
 
 const avatar1 = 'http://rz1wa9fyb.hb-bkt.clouddn.com/wang.jpeg'

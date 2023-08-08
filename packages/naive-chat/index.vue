@@ -338,12 +338,13 @@ defineExpose({
         <slot name="sidebar-header">
           <div px-10px py-10px bg="gray/2">
             <input
+              h-36px
               w-full
               rounded-2px
-              px-10px py-2px text-14px
+              px-10px py-2px text-12px
               bg="gray/10"
               type="text"
-              placeholder="搜索"
+              placeholder="自定义头部信息"
             >
           </div>
         </slot>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { NcAvatar } from '..'
+import type { Contact } from '..'
+import { NcAvatar, NcBadge } from '..'
 import type { Menu, MenuKey } from './types'
 
 defineOptions({
@@ -8,6 +9,7 @@ defineOptions({
 
 const menus = inject<Ref<Menu[]>>('menus')!
 const activeMenuKey = inject<Ref<MenuKey>>('active-menu-key')
+const lastMessages = inject<ComputedRef<Contact[]>>('last-messages')
 
 activeMenuKey!.value = menus.value.filter(item => item.active)[0].key
 
@@ -24,13 +26,23 @@ function getMenuClass(menu: Menu) {
     return `${menu.activeIcon} text-green/80`
   return `${menu.icon} text-gray/50`
 }
+
+const count = computed(() => {
+  let count = 0
+  if (lastMessages) {
+    lastMessages.value.forEach((item) => {
+      count += item.unread ? item.unread : 0
+    })
+  }
+  return count
+})
 </script>
 
 <template>
   <div
     h-full min-w-60px
     border-r
-    bg="gray-500/10"
+    bg="gray-900/10"
     py-10px
     flex="~ col items-center"
   >
@@ -45,9 +57,14 @@ function getMenuClass(menu: Menu) {
       <div
         v-for="menu in menus"
         :key="menu.key"
-        cursor-pointer :class="getMenuClass(menu)"
+        cursor-pointer
         @click="onClickMenu(menu)"
-      />
+      >
+        <NcBadge v-if="menu.key === 'message'" :count="count">
+          <div :class="getMenuClass(menu)" />
+        </NcBadge>
+        <div v-else :class="getMenuClass(menu)" />
+      </div>
     </div>
   </div>
 </template>
