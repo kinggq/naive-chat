@@ -39,7 +39,7 @@ export const messages: Message[] = [
     id: generateUUID(),
     content: `消息${generateUUID()}`,
     type: 'text',
-    toContactId: 1000,
+    toContactId: 1,
     status: 'success',
     sendTime: 1690639200000,
     fromUser: {
@@ -51,7 +51,7 @@ export const messages: Message[] = [
     id: generateUUID(),
     content: `消息${generateUUID()}`,
     type: 'text',
-    toContactId: 1000,
+    toContactId: 1,
     status: 'success',
     sendTime: 1690624800000,
     fromUser: {
@@ -75,7 +75,7 @@ export const messages: Message[] = [
     id: generateUUID(),
     content: `消息${generateUUID()}`,
     type: 'text',
-    toContactId: 1000,
+    toContactId: 1,
     status: 'success',
     sendTime: 1690714800000,
     fromUser: {
@@ -87,7 +87,7 @@ export const messages: Message[] = [
     id: generateUUID(),
     content: `消息${generateUUID()}`,
     type: 'text',
-    toContactId: 1000,
+    toContactId: 1,
     status: 'success',
     sendTime: 1690992000000,
     fromUser: {
@@ -99,7 +99,7 @@ export const messages: Message[] = [
     id: generateUUID(),
     content: `消息${generateUUID()}`,
     type: 'text',
-    toContactId: 1000,
+    toContactId: 1,
     status: 'success',
     sendTime: 1690992000000,
     fromUser: {
@@ -111,7 +111,7 @@ export const messages: Message[] = [
     id: generateUUID(),
     content: `消息${generateUUID()}`,
     type: 'text',
-    toContactId: 1000,
+    toContactId: 1,
     status: 'success',
     sendTime: 1690992000000,
     fromUser: {
@@ -159,7 +159,7 @@ export const messages: Message[] = [
     id: generateUUID(),
     content: `消息${generateUUID()}`,
     type: 'text',
-    toContactId: 1000,
+    toContactId: 1,
     status: 'success',
     sendTime: 1691056800000,
     fromUser: {
@@ -171,7 +171,7 @@ export const messages: Message[] = [
     id: generateUUID(),
     content: '',
     type: 'file',
-    toContactId: 1000,
+    toContactId: 1,
     status: 'success',
     sendTime: 1691056800000,
     fileName: '简历.doc',

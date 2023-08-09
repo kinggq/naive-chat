@@ -8,6 +8,7 @@ export type ContentType = 'text' | 'event' | 'file' | 'image'
 
 export interface FromUser {
   id: number
+  nickname?: string
   avatar?: string
 }
 

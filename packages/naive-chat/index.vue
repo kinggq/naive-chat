@@ -166,6 +166,7 @@ function appendMessage(message: Message) {
       id: message.toContactId,
       lastMessage: renderLastMessage(message),
       lastTime: message.sendTime,
+      unread: 1,
     } as Contact)
     scrollToBottom()
   }
@@ -322,6 +323,24 @@ function clearMessage(id: number) {
   messageStore[id].data = []
 }
 
+function removeOneMessage(contactId: number, messageId: string) {
+  if (!messageStore[contactId])
+    return false
+  messageStore[contactId].data = messageStore[contactId].data.filter(item => item.id !== messageId)
+  return true
+}
+
+function getCurrentMessage() {
+  return currentMessage.value?.data
+}
+
+function getCurrentLastMessage() {
+  if (getCurrentMessage()) {
+    const len = getCurrentMessage().length
+    return getCurrentMessage()[len - 1]
+  }
+}
+
 defineExpose({
   initContacts,
   appendMessage,
@@ -331,6 +350,9 @@ defineExpose({
   appendContact,
   removeContact,
   clearMessage,
+  removeOneMessage,
+  getCurrentMessage,
+  getCurrentLastMessage,
 })
 </script>
 

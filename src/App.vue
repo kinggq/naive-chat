@@ -1,6 +1,15 @@
 <script setup lang="ts">
-import type { Contact, NaiveChatType, PullMessageOption, SendOption } from '../packages'
 import { NaiveChat } from '../packages'
+
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import type {
+  Contact,
+  Message,
+  NaiveChatType,
+  PullMessageOption,
+  SendOption,
+} from '../packages'
+
 import { contacts, messages } from './utils'
 
 const naiveChatRef = ref<NaiveChatType>()
@@ -49,6 +58,35 @@ function send({ message, next }: SendOption) {
     })
   })
 }
+
+function handleAppendMessage() {
+  const msg: Message = {
+    id: 'id1',
+    content: '最近忙什么呢?',
+    type: 'text',
+    toContactId: 3,
+    fromUser: {
+      id: 3,
+      nickname: '梁宏达',
+      avatar: 'http://rz1wa9fyb.hb-bkt.clouddn.com/liang.jpeg',
+    },
+    sendTime: Date.now(),
+    status: 'success',
+    fileName: undefined,
+  }
+  naiveChatRef.value?.appendMessage(msg)
+}
+
+function handleRemoveMessage() {
+  const lastMessage = naiveChatRef.value?.getCurrentLastMessage()
+  if (lastMessage?.id) {
+    const r = naiveChatRef.value?.removeOneMessage(lastMessage.toContactId, lastMessage.id)
+    if (!r)
+      alert('删除失败')
+  }
+
+  else { alert('删除失败') }
+}
 </script>
 
 <template>
@@ -61,6 +99,15 @@ function send({ message, next }: SendOption) {
       @pull-message="pullMessage"
       @send="send"
     />
+
+    <div py-20px flex="~ gap3">
+      <button btn @click="handleAppendMessage">
+        梁老师发来一条消息
+      </button>
+      <button btn @click="handleRemoveMessage">
+        删除一条消息
+      </button>
+    </div>
 
     <div mt-50px text="center gray-700 dark:gray-200">
       <Props />

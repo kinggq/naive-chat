@@ -44,5 +44,7 @@ export {
   NcEditor,
   NcBadge,
 }
-export * from './types'
+export * from './contact/types'
+export * from './naive-chat/types'
+export * from './menu/types'
 export default NaiveChatP
