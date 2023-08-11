@@ -5,7 +5,7 @@ export const contacts = [
   {
     id: 3,
     nickname: '梁宏达',
-    avatar: 'http://rz1wa9fyb.hb-bkt.clouddn.com/liang.jpeg',
+    avatar: 'https://gitee.com/bao-guoqiang/image/raw/master/liang.jpeg',
     lastMessage: '老梁故事会下期节目已经准备好了',
     lastTime: 1691056800000,
     index: 'L',
@@ -14,7 +14,7 @@ export const contacts = [
   {
     id: 1,
     nickname: '王局',
-    avatar: 'http://rz1wa9fyb.hb-bkt.clouddn.com/wang.jpeg',
+    avatar: 'https://gitee.com/bao-guoqiang/image/raw/master/wang.jpeg',
     lastMessage: '今天吃点好的',
     lastTime: 1690639200000,
     index: 'W',
@@ -23,7 +23,7 @@ export const contacts = [
   {
     id: 2,
     nickname: '小崔',
-    avatar: 'http://rz1wa9fyb.hb-bkt.clouddn.com/cui.jpeg',
+    avatar: 'https://gitee.com/bao-guoqiang/image/raw/master/cui.jpeg',
     lastMessage: '夹头该死',
     lastTime: 1691056800000,
     index: 'X',
@@ -32,8 +32,8 @@ export const contacts = [
 
 ]
 
-const avatar1 = 'http://rz1wa9fyb.hb-bkt.clouddn.com/wang.jpeg'
-const avatar2 = 'https://thirdwx.qlogo.cn/mmopen/vi_32/RMksZlPP4myx9pbGzt3PmV2FNIpia8hVHpUXbHM0RfbJtsSMEWCLicbvGuJRMpoAam3sZclNo0YtOnvJ0a8eMtyQ/132'
+const avatar1 = 'https://gitee.com/bao-guoqiang/image/raw/master/wang.jpeg'
+const avatar2 = 'https://gitee.com/bao-guoqiang/image/raw/master/king.jpeg'
 export const messages: Message[] = [
   {
     id: generateUUID(),

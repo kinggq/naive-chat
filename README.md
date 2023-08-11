@@ -116,8 +116,8 @@ function send({ message, next }: SendOption) {
 
 ## Preview
 
-![](http://rz1wa9fyb.hb-bkt.clouddn.com/1691462193463.jpg)
+![](https://gitee.com/bao-guoqiang/image/raw/master/1691462193463.jpg)
 
-![](http://rz1wa9fyb.hb-bkt.clouddn.com/1691462140535.jpg)
+![](https://gitee.com/bao-guoqiang/image/raw/master/1691462140535.jpg)
 
-![](http://rz1wa9fyb.hb-bkt.clouddn.com/1691461975207.jpg)
+![](https://gitee.com/bao-guoqiang/image/raw/master/1691461975207.jpg)

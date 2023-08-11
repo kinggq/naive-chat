@@ -34,6 +34,7 @@
     "shims.d.ts",
     "auto-imports.d.ts",
     "components.d.ts",
+    "vite.config.docs.ts",
     "vite.config.ts"
   ]
 }
