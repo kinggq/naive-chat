@@ -8,6 +8,7 @@ const emits = defineEmits<{
   (e: 'messageAvatarClick', message: Message): void
   (e: 'messageClick', message: Message): void
   (e: 'messageContextmenu', message: Message): void
+  (e: 'eventMessageClick', message: Message): void
 }>()
 
 defineOptions({
@@ -101,6 +102,10 @@ function pushTime(curMsg: Message, index: number) {
   }
 }
 
+function eventMessageClick(message: Message) {
+  emits('eventMessageClick', message)
+}
+
 watch(() => currentContact.value, () => {
   showSidebar.value = false
 })
@@ -173,7 +178,11 @@ defineExpose({ scrollToBottom })
             {{ pushTime(item, index) }}
           </span>
         </div>
-        <div :class="getContentClass(item)">
+        <div v-if="item.type === 'event'" text="12px gray-800/60 dark:gray center">
+          {{ item.content.split('*')[0] }}
+          <span cursor-pointer text="blue-900/80 dark:blue" @click="eventMessageClick(item)">{{ item.content.split('*')[1] }}</span>
+        </div>
+        <div v-else :class="getContentClass(item)">
           <div>
             <NcAvatar :url="item?.fromUser?.avatar || ''" @click="clickAvatar(item)" />
           </div>

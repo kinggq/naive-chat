@@ -90,6 +90,17 @@
         <td>当点击左侧菜单时触发</td>
         <td />
       </tr>
+      <tr>
+        <td>event-message-click</td>
+        <td>
+          <code>
+            (message: Message) => void
+          </code>
+        </td>
+        <td>undefined</td>
+        <td>Event消息点击事件，Event消息如果需要点击事件，message的content用*分割需要点击事件的内容，示例：我撤回了一条消息*重新编辑</td>
+        <td />
+      </tr>
     </tbody>
   </table>
 </template>

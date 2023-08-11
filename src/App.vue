@@ -87,17 +87,99 @@ function handleRemoveMessage() {
 
   else { alert('删除失败') }
 }
+
+function handleSendMessage() {
+  const c = naiveChatRef.value?.getCurrentContact()
+  if (!c?.id) {
+    alert('先开启一个好友的聊天窗口')
+    return
+  }
+  const msg: Message = {
+    id: 'id1x1',
+    content: `hi,${c.nickname}`,
+    type: 'text',
+    toContactId: c.id,
+    fromUser: userInfo,
+    sendTime: Date.now(),
+    status: 'success',
+    fileName: undefined,
+  }
+  naiveChatRef.value?.appendMessage(msg)
+}
+
+function handleUpdateMessage() {
+  const m = naiveChatRef.value?.getCurrentMessage()
+  const len = m?.length
+  if (!len) {
+    alert('该联系没有可修改的消息')
+    return
+  }
+  naiveChatRef.value?.updateMessage({
+    ...m[len - 1],
+    type: 'file',
+    content: '',
+    fileName: '修改了一条消息',
+    fileSize: 10000,
+  } as Message)
+}
+
+function handleUpdateContact() {
+  const c = naiveChatRef.value?.getCurrentContact()
+  naiveChatRef.value?.updateContact({
+    ...c,
+    nickname: '梁老师',
+  } as Contact)
+}
+
+let createContactId = 10011
+function handleAddContact() {
+  createContactId += 1
+  naiveChatRef.value?.appendContact({
+    id: createContactId,
+    nickname: `好友${createContactId}`,
+    avatar: '',
+    index: 'H',
+  })
+}
+
+function handleSendEventMessage() {
+  const c = naiveChatRef.value?.getCurrentContact()
+  if (!c?.id) {
+    alert('先开启一个好友的聊天窗口')
+    return
+  }
+  const msg: Message = {
+    id: 'id1x1',
+    content: '我撤回了一条消息*重新编辑',
+    type: 'event',
+    toContactId: c.id,
+    fromUser: userInfo,
+    sendTime: Date.now(),
+    status: 'success',
+    fileName: undefined,
+  }
+  naiveChatRef.value?.appendMessage(msg)
+}
+
+function handleEventMessageClick() {
+  alert('点击了Event消息')
+}
+
+function handleSetValue() {
+  naiveChatRef.value?.setValue('you wife is charming')
+}
 </script>
 
 <template>
   <BaseHeader />
-  <main p="x-4 y-10">
+  <main p="x-4 y-10" mt-100px>
     <NaiveChat
       ref="naiveChatRef"
       :user-info="userInfo"
       @change-contact="changeContact"
       @pull-message="pullMessage"
       @send="send"
+      @event-message-click="handleEventMessageClick"
     />
 
     <div py-20px flex="~ gap3">
@@ -106,6 +188,26 @@ function handleRemoveMessage() {
       </button>
       <button btn @click="handleRemoveMessage">
         删除一条消息
+      </button>
+      <button btn @click="handleSendMessage">
+        发送一条消息
+      </button>
+      <button btn @click="handleUpdateMessage">
+        修改一条消息
+      </button>
+      <button btn @click="handleUpdateContact">
+        修改联系人
+      </button>
+    </div>
+    <div flex="~ gap3">
+      <button btn @click="handleAddContact">
+        添加一个联系人
+      </button>
+      <button btn @click="handleSendEventMessage">
+        发送一条Event消息
+      </button>
+      <button btn @click="handleSetValue">
+        给输入框插入内容
       </button>
     </div>
 

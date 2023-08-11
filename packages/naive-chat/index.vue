@@ -24,6 +24,7 @@ const emits = defineEmits<{
   (e: 'messageClick', message: Message): void
   (e: 'messageContextmenu', message: Message): void
   (e: 'menuClick', menuKey: string, menu: Menu): void
+  (e: 'eventMessageClick', message: Message): void
 }>()
 
 defineOptions({
@@ -316,6 +317,14 @@ function getCurrentLastMessage() {
   }
 }
 
+function setValue(text: string) {
+  editorRef.value?.setValue(text)
+}
+
+function eventMessageClick(message: Message) {
+  emits('eventMessageClick', message)
+}
+
 defineExpose({
   initContacts,
   appendMessage,
@@ -328,6 +337,7 @@ defineExpose({
   removeOneMessage,
   getCurrentMessage,
   getCurrentLastMessage,
+  setValue,
 })
 </script>
 
@@ -405,6 +415,7 @@ defineExpose({
         @message-avatar-click="message => emits('messageAvatarClick', message)"
         @message-click="message => emits('messageClick', message)"
         @message-contextmenu="message => emits('messageContextmenu', message)"
+        @event-message-click="eventMessageClick"
       >
         <template #editor>
           <NcEditor ref="editorRef" @send="send" @upload="uploadFile">

@@ -34,8 +34,16 @@ function updateContent() {
 }
 
 function focusInput() {
-  if (editableRef.value)
-    editableRef.value.focus()
+  if (editableRef.value) {
+    const div = editableRef.value
+    const range = document.createRange()
+    const sel = window.getSelection()
+    range.selectNodeContents(div)
+    range.collapse(false) // false means collapse to end
+    sel?.removeAllRanges()
+    sel?.addRange(range)
+    div.focus()
+  }
 }
 
 const fileInputRef = ref<HTMLInputElement>()
@@ -77,8 +85,15 @@ function insertNewLine() {
   selection.addRange(range)
 }
 
+function setValue(text: string) {
+  editableRef.value.innerHTML = text
+  content.value = text
+  focusInput()
+}
+
 defineExpose({
   focusInput,
+  setValue,
 })
 </script>
 
