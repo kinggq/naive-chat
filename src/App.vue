@@ -172,7 +172,7 @@ function handleSetValue() {
 
 <template>
   <BaseHeader />
-  <main p="x-4 y-10" mt-100px>
+  <main p="x-4 y-10" mt-100px min-w-800px>
     <NaiveChat
       ref="naiveChatRef"
       :user-info="userInfo"
