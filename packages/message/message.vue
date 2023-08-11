@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Contact, Message, MessageStatus, UserInfo } from 'packages'
 import { NcAvatar } from '../'
-import { formatFileSize, getFileIcon } from '../_utils'
+import { formatFileSize, formatTime, getFileIcon } from '../_utils'
 
 const emits = defineEmits<{
   (e: 'pullMessage', next: () => void, contactId: number): void
@@ -89,6 +89,18 @@ function toggleSidebar() {
   showSidebar.value = !showSidebar.value
 }
 
+function pushTime(curMsg: Message, index: number) {
+  const prev = currentMessage.value.data[index - 1]
+
+  if (prev) {
+    if (curMsg.sendTime - prev.sendTime > 1000 * 60)
+      return formatTime(curMsg.sendTime)
+  }
+  else {
+    return formatTime(curMsg.sendTime)
+  }
+}
+
 watch(() => currentContact.value, () => {
   showSidebar.value = false
 })
@@ -150,18 +162,18 @@ defineExpose({ scrollToBottom })
         </div>
       </div>
       <div
-        v-for="item in (currentMessage ?? {}).data"
+        v-for="(item, index) in (currentMessage ?? {}).data"
         :key="item.id"
         w-full py-10px
       >
-        <div v-if="item.type === 'event'" text-center>
+        <div v-show="pushTime(item, index)" pb-20px text-center>
           <span
             text="12px gray-800/60 dark:gray"
           >
-            {{ item.content }}
+            {{ pushTime(item, index) }}
           </span>
         </div>
-        <div v-else :class="getContentClass(item)">
+        <div :class="getContentClass(item)">
           <div>
             <NcAvatar :url="item?.fromUser?.avatar || ''" @click="clickAvatar(item)" />
           </div>
