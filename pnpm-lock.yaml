@@ -55,9 +55,6 @@ devDependencies:
   pnpm:
     specifier: ^8.6.0
     version: 8.6.0
-  simple-git-hooks:
-    specifier: ^2.8.1
-    version: 2.8.1
   taze:
     specifier: ^0.10.2
     version: 0.10.2
@@ -5215,12 +5212,6 @@ packages:
       tuf-js: 1.1.6
     transitivePeerDependencies:
       - supports-color
-    dev: true
-
-  /simple-git-hooks@2.8.1:
-    resolution: {integrity: sha512-DYpcVR1AGtSfFUNzlBdHrQGPsOhuuEJ/FkmPOOlFysP60AHd3nsEpkGq/QEOdtUyT1Qhk7w9oLmFoMG+75BDog==}
-    hasBin: true
-    requiresBuild: true
     dev: true
 
   /sirv@2.0.3:
