@@ -16,14 +16,34 @@ const avatarRounded = inject<ComputedRef<number>>('avatar-rounded')
 function getImageStyle() {
   return `border-radius: ${avatarRounded?.value}px;`
 }
+
+const finish = ref(true)
+function onLoad() {
+  finish.value = false
+}
 </script>
 
 <template>
-  <div>
+  <div class="nc-avatar">
+    <div
+      v-if="finish || !url"
+      h-full
+      w-full
+      flex
+      items-center
+      justify-center
+      bg="gray/10"
+      text="gray-500/50"
+      :style="getImageStyle()"
+    >
+      <div i-carbon:user-filled />
+    </div>
     <img
+      v-show="!finish && url"
       class="nc-avatar"
       :src="url" alt=""
       :style="getImageStyle()"
+      @load="onLoad"
     >
   </div>
 </template>
