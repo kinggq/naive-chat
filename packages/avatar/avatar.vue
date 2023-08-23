@@ -11,16 +11,19 @@ const props = withDefaults(
   },
 )
 const size = `${props.size}px`
-function getImageClass() {
-  return `nc-avatar rounded-${props.rounded}px`
+
+const avatarRounded = inject<ComputedRef<number>>('avatar-rounded')
+function getImageStyle() {
+  return `border-radius: ${avatarRounded?.value}px;`
 }
 </script>
 
 <template>
   <div>
     <img
-      :class="getImageClass()"
+      class="nc-avatar"
       :src="url" alt=""
+      :style="getImageStyle()"
     >
   </div>
 </template>

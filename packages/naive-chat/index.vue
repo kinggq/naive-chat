@@ -12,8 +12,10 @@ import type { Message, MessageStatus, MessageStore, PullMessageOption, SendOptio
 const props = withDefaults(defineProps<{
   userInfo: UserInfo
   openFirst?: boolean
+  avatarRounded?: number
 }>(), {
   openFirst: true,
+  avatarRounded: 4,
 })
 
 const emits = defineEmits<{
@@ -65,6 +67,7 @@ const lastMessages = computed(
     .sort((a, b) => b.lastTime! - a.lastTime!),
 )
 
+provide('avatar-rounded', computed(() => props.avatarRounded))
 provide('menus', menus)
 provide('message-store', messageStore)
 provide('current-message', currentMessage)

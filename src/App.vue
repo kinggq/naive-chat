@@ -168,6 +168,14 @@ function handleEventMessageClick() {
 function handleSetValue() {
   naiveChatRef.value?.setValue('you wife is charming')
 }
+
+const rounded = ref(4)
+function handleAvatarRounded() {
+  if (rounded.value === 4)
+    rounded.value = 40
+  else
+    rounded.value = 4
+}
 </script>
 
 <template>
@@ -176,6 +184,7 @@ function handleSetValue() {
     <NaiveChat
       ref="naiveChatRef"
       :user-info="userInfo"
+      :avatar-rounded="rounded"
       @change-contact="changeContact"
       @pull-message="pullMessage"
       @send="send"
@@ -208,6 +217,9 @@ function handleSetValue() {
       </button>
       <button btn @click="handleSetValue">
         给输入框插入内容
+      </button>
+      <button btn @click="handleAvatarRounded">
+        切换头像形状
       </button>
     </div>
 
