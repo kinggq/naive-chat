@@ -31,6 +31,15 @@
         <td>是否默认选中第一个最近联系人</td>
         <td />
       </tr>
+      <tr>
+        <td>avatar-rounded</td>
+        <td>
+          <code>number</code>
+        </td>
+        <td>4</td>
+        <td>头像圆角</td>
+        <td />
+      </tr>
     </tbody>
   </table>
 </template>
