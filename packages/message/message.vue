@@ -110,6 +110,22 @@ watch(() => currentContact.value, () => {
   showSidebar.value = false
 })
 
+const getArrowStyle = computed(() => {
+  return (content: Message) => {
+    if (content?.fromUser?.id === userInfo?.value.id) {
+      if (content.type === 'file')
+        return 'border-r-transparent border-l-white  dark:border-l-gray/10 right-0'
+      else
+        return 'border-r-transparent border-l-green-600/60 dark:border-l-green-600 right-0'
+    }
+    else {
+      if (content.type === 'file')
+        return 'border-l-transparent border-r-white dark:border-r-gray/10 left-0'
+      return 'border-l-transparent border-r-white/80 dark:border-r-gray-500/50 left-0'
+    }
+  }
+})
+
 defineExpose({ scrollToBottom })
 </script>
 
@@ -199,6 +215,15 @@ defineExpose({ scrollToBottom })
               @click="clickMessage(item)"
               @contextmenu.prevent="contextmenuMessage(item)"
             >
+              <div
+                v-show="item.type !== 'image'"
+                :class="getArrowStyle(item)"
+                border-t="5px transparent"
+
+                border-b="5px transparent"
+
+                absolute top-10px h-0 w-0 border-l-5px border-r-5px
+              />
               <div
                 v-if="item.type === 'text'"
                 text="14px left"
