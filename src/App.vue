@@ -85,7 +85,7 @@ function handleRemoveMessage() {
       alert('删除失败')
   }
 
-  else { alert('删除失败') }
+  else { alert('删除失败了') }
 }
 
 function handleSendMessage() {
