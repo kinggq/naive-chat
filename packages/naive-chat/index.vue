@@ -95,6 +95,7 @@ function getCurrentContact() {
 
 function changeLastMessage(contact: Contact) {
   currentContact.value = contact
+  emits('changeContact', contact)
   updateContact({
     id: contact.id,
     unread: 0,
